@@ -22,7 +22,7 @@ module EXEL
         it 'should ensure the process fails silently' do
           node = TestNode.new(instruction)
           allow(node).to receive(:run).and_raise(EXEL::Error::JobTermination, 'Error')
-          #FIXME expect(Rails.logger).to receive(:error).with('JobTerminationError: Error')
+          expect(EXEL.logger).to receive(:error).with('JobTerminationError: Error')
           expect { node.start(context) }.to_not raise_error
         end
       end

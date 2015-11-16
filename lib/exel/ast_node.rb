@@ -24,7 +24,7 @@ module EXEL
     def fail_silently(&block)
       yield if block_given?
     rescue EXEL::Error::JobTermination => e
-      #FIXME Rails.logger.error "JobTerminationError: #{ e.message.chomp }"
+      EXEL.logger.error "JobTerminationError: #{e.message.chomp}"
     end
   end
 end

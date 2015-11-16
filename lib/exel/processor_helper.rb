@@ -26,11 +26,11 @@ module EXEL
     end
 
     def log_info(message)
-      #FIXME Rails.logger.info(log(message))
+      EXEL.logger.info(log(message))
     end
 
     def log_error(message)
-      #FIXME Rails.logger.error(log(message))
+      EXEL.logger.error(log(message))
     end
 
     def log(message)
