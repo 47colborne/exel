@@ -1,9 +1,13 @@
 module EXEL
   module Handlers
     describe S3Handler do
-      subject(:handler) { S3Handler.new('bucket') }
+      subject(:handler) { S3Handler.new }
 
       describe '#get_object' do
+        before do
+          EXEL.configure { |config| config[:s3_bucket] = 'bucket' }
+        end
+
         it 'should have the correct bucket and file names' do
           file_name = 'abc.txt'
           s3_obj = handler.get_object(file_name)

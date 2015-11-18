@@ -4,10 +4,6 @@ require 'tempfile'
 module EXEL
   module Handlers
     class S3Handler
-      def initialize(bucket)
-        @bucket = bucket
-      end
-
       def upload(file)
         filename = get_filename(file)
         obj = get_object(filename)
@@ -28,11 +24,11 @@ module EXEL
 
       def get_object(filename)
         s3 = Aws::S3::Resource.new(
-            credentials: Aws::Credentials.new('access_key', 'secret'),  #FIXME Rails.configuration.aws.access_key_id,
-                                                                        #FIXME Rails.configuration.aws.secret_access_key),
+            credentials: Aws::Credentials.new(EXEL.configuration[:aws][:access_key_id],
+                                              EXEL.configuration[:aws][:secret_access_key]),
             region: 'us-east-1'
         )
-        s3.bucket(@bucket).object(filename)
+        s3.bucket(EXEL.configuration[:s3_bucket]).object(filename)
       end
 
       private

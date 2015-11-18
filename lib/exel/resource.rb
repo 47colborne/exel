@@ -1,7 +1,5 @@
 module EXEL
   class Resource
-    BUCKET = 'bucket' #FIXME
-
     def self.remotize(value)
       file?(value) ? upload(value) : value
     end
@@ -25,11 +23,11 @@ module EXEL
     end
 
     def self.download(uri)
-      Handlers::S3Handler.new(BUCKET).download(uri)
+      Handlers::S3Handler.new.download(uri)
     end
 
     def self.upload(file)
-      Handlers::S3Handler.new(BUCKET).upload(file)
+      Handlers::S3Handler.new.upload(file)
     end
   end
 end

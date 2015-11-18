@@ -15,7 +15,7 @@ module EXEL
     end
 
     def self.deserialize(uri)
-      handler = Handlers::S3Handler.new('bucket') #FIXME
+      handler = Handlers::S3Handler.new
       file = handler.download(uri)
       context = Marshal.load(file.read)
       file.close
@@ -56,7 +56,7 @@ module EXEL
     end
 
     def upload(file)
-      handler = Handlers::S3Handler.new('bucket') #FIXME
+      handler = Handlers::S3Handler.new
       handler.upload(file)
     end
 
