@@ -5,22 +5,18 @@ module EXEL
   module Processors
     class AsyncProcessor
       include EXEL::ProcessorHelper
+      attr_reader :handler
 
       def initialize(context)
         @context = context
+        @handler = EXEL::Handlers::SidekiqHandler.new(context)
 
         log_prefix_with '[AsyncProcessor]'
       end
 
-      def process(callback)
+      def process(block)
         log_process do
-          @context[:_block] = callback
-
-          push_args = {'class' => ExecutionWorker, 'args' => [@context.serialize]}
-          push_args['queue'] = @context[:queue] if @context[:queue]
-          push_args['retry'] = @context[:retry] if @context[:retry]
-
-          Sidekiq::Client.push(push_args)
+          @handler.do_async(block)
           log_info 'call to async completed'
         end
       end
