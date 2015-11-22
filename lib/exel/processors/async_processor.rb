@@ -1,4 +1,3 @@
-require 'sidekiq'
 require_relative '../processor_helper'
 
 module EXEL

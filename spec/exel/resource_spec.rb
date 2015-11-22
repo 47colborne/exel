@@ -14,7 +14,7 @@ module EXEL
           context "with a #{file_class}" do
             before do
               @file = instance_double(file_class)
-              allow(@file).to receive(:kind_of?) { |klass| klass == file_class }
+              allow(@file).to receive(:is_a?) { |klass| klass == file_class }
             end
 
             it 'should upload the file to S3' do

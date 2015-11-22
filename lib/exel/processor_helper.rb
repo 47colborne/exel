@@ -4,7 +4,7 @@ module EXEL
     # Helper Methods
 
     def tag(*tags)
-      tags.map { |t| "[#{ t }]" }.join('')
+      tags.map { |t| "[#{t}]" }.join('')
     end
 
     def timestamp
@@ -12,7 +12,7 @@ module EXEL
     end
 
     def file_size_in_mb(file)
-      "#{ '%.2f' % (file.size.to_f / 1024000).round(2) } MB"
+      "#{'%.2f' % (file.size.to_f / 1_024_000).round(2)} MB"
     end
 
     # Logging Helpers
@@ -34,26 +34,26 @@ module EXEL
     end
 
     def log(message)
-      "#{ log_prefix } #{ message }"
+      "#{log_prefix} #{message}"
     end
 
-    def log_transaction(message = "")
+    def log_transaction(message = '')
       transaction_start_time = Time.now.to_f
-      log_info "Started at #{ Time.now }"
+      log_info "Started at #{transaction_start_time}"
       yield(transaction_start_time)
       transaction_end_time = Time.now.to_f
-      log_info "Finished in #{(transaction_end_time - transaction_start_time).to_i} seconds #{ message }"
+      log_info "Finished in #{(transaction_end_time - transaction_start_time).to_i} seconds #{message}"
     end
 
-    def log_exception(message = "")
+    def log_exception(message = '')
       yield
     rescue => e
-      log_error "Exception: #{ e.message.chomp } #{ message }"
+      log_error "Exception: #{e.message.chomp} #{message}"
       log_error e.backtrace.join("\n")
       raise e
     end
 
-    def log_process(message = "")
+    def log_process(message = '')
       log_exception(message) { log_transaction(message) { yield } }
     end
 

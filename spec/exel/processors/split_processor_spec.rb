@@ -69,7 +69,7 @@
             3.times do |i|
               index = i + 1
               file = splitter.generate_chunk("#{index}")
-              file_name = splitter.get_filename(file)
+              file_name = splitter.filename(file)
               expect(file_name).to include("text_#{index}_")
             end
           end

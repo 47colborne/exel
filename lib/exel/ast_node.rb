@@ -11,7 +11,7 @@ module EXEL
       fail_silently { run(context) }
     end
 
-    def run(context)
+    def run(_context)
       raise "#{self.class} does not implement #process"
     end
 
@@ -21,7 +21,7 @@ module EXEL
 
     private
 
-    def fail_silently(&block)
+    def fail_silently(&_block)
       yield if block_given?
     rescue EXEL::Error::JobTermination => e
       EXEL.logger.error "JobTerminationError: #{e.message.chomp}"

@@ -9,7 +9,7 @@ module EXEL
     end
 
     def serialize
-      remotized_table = @table.reduce({}) { |acc, (key, value)| acc[key] = EXEL::Resource.remotize(value); acc }
+      remotized_table = @table.each_with_object({}) { |(key, value), acc| acc[key] = EXEL::Resource.remotize(value) }
       file = serialize_context(remotized_table)
       upload(file)
     end
@@ -49,7 +49,7 @@ module EXEL
     private
 
     def serialize_context(table)
-      file = Tempfile.new(SecureRandom.uuid, :encoding => 'ascii-8bit')
+      file = Tempfile.new(SecureRandom.uuid, encoding: 'ascii-8bit')
       file.write(Marshal.dump(Context.new(table)))
       file.rewind
       file

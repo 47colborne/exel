@@ -18,7 +18,7 @@ module EXEL
         @context = context
 
         @file = context[:resource]
-        @file_name = get_filename(@file)
+        @file_name = filename(@file)
         @csv_options = context[:csv_options] || {col_sep: ','}
 
         log_prefix_with '[SplitProcessor]'
@@ -31,7 +31,7 @@ module EXEL
               process_line(line, callback)
             end
           rescue CSV::MalformedCSVError => e
-            log_error "CSV::MalformedCSVError => #{ e.message }"
+            log_error "CSV::MalformedCSVError => #{e.message}"
           end
           process_line(:eof, callback)
           File.delete(@file.path)
@@ -50,19 +50,19 @@ module EXEL
 
       def generate_chunk(content)
         @tempfile_count += 1
-        chunk = Tempfile.new([get_chunk_filename, '.csv'])
+        chunk = Tempfile.new([chunk_filename, '.csv'])
         chunk.write(content)
         chunk.rewind
 
-        log_info "Generated chunk # #{ @tempfile_count } for file #{ @file_name } in #{ chunk.path }"
+        log_info "Generated chunk # #{@tempfile_count} for file #{@file_name} in #{chunk.path}"
         chunk
       end
 
-      def get_chunk_filename
+      def chunk_filename
         "#{@file_name}_#{@tempfile_count}_"
       end
 
-      def get_filename(file)
+      def filename(file)
         file_name_with_extension = file.path.split('/').last
         file_name_with_extension.split('.').first
       end

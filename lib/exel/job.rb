@@ -2,7 +2,7 @@ module EXEL
   module Job
     class << self
       def define(job_name, &block)
-        raise %Q(Job #{job_name.inspect} is already defined) unless registry[job_name].nil?
+        raise "Job #{job_name.inspect} is already defined" unless registry[job_name].nil?
         registry[job_name] = block
       end
 
@@ -12,7 +12,7 @@ module EXEL
 
       def run(dsl_code_or_name, context = {})
         context = EXEL::Context.new(context) if context.is_a?(Hash)
-        (ast = parse(dsl_code_or_name)) ? ast.start(context) : raise(%Q(Job "#{dsl_code_or_name}" not found))
+        (ast = parse(dsl_code_or_name)) ? ast.start(context) : raise(%(Job "#{dsl_code_or_name}" not found))
       end
 
       private
@@ -37,9 +37,9 @@ module EXEL
       def self.parse(dsl_proc_or_code)
         parser = Parser.new
         if dsl_proc_or_code.is_a?(::Proc)
-          parser.instance_eval &dsl_proc_or_code
+          parser.instance_eval(&dsl_proc_or_code)
         else
-          parser.instance_eval dsl_proc_or_code
+          parser.instance_eval(dsl_proc_or_code)
         end
         parser.ast
       end

@@ -104,7 +104,7 @@ module EXEL
       context 'given DSL code as a proc' do
         it 'should eval the code as a block' do
           dsl_proc = Proc.new {}
-          expect(parser).to receive(:instance_eval) do |*args, &block|
+          expect(parser).to receive(:instance_eval) do |*_args, &block|
             expect(block).to eq(dsl_proc)
           end
 
