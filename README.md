@@ -1,4 +1,5 @@
 # EXEL
+[![Gem Version](https://badge.fury.io/rb/exel.svg)](https://badge.fury.io/rb/exel)
 
 TODO: Write a gem description
 
