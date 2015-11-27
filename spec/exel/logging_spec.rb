@@ -21,8 +21,8 @@ module EXEL
 
       it 'should initialize the logger on first read if not already set' do
         EXEL.configure do |config|
-          config[:log_level] = :warn
-          config[:log_filename] = 'log.txt'
+          config.log_level = :warn
+          config.log_filename = 'log.txt'
         end
 
         logger = instance_double(Logger)

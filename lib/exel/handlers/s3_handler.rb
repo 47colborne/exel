@@ -25,12 +25,12 @@ module EXEL
       def get_object(filename)
         s3 = Aws::S3::Resource.new(
             credentials: Aws::Credentials.new(
-                EXEL.configuration[:aws][:access_key_id],
-                EXEL.configuration[:aws][:secret_access_key]
+                EXEL.configuration.aws.access_key_id,
+                EXEL.configuration.aws.secret_access_key
             ),
             region: 'us-east-1'
         )
-        s3.bucket(EXEL.configuration[:s3_bucket]).object(filename)
+        s3.bucket(EXEL.configuration.s3_bucket).object(filename)
       end
 
       private

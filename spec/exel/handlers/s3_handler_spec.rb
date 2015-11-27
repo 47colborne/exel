@@ -5,7 +5,7 @@ module EXEL
 
       describe '#get_object' do
         before do
-          EXEL.configure { |config| config[:s3_bucket] = 'bucket' }
+          EXEL.configure { |config| config.s3_bucket = 'bucket' }
         end
 
         it 'should have the correct bucket and file names' do

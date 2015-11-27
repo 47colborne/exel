@@ -15,11 +15,11 @@ module EXEL
     end
 
     def self.log_filename
-      EXEL.configuration[:log_filename] || '/dev/null'
+      EXEL.configuration.log_filename || '/dev/null'
     end
 
     def self.log_level
-      level = EXEL.configuration[:log_level] || DEFAULT_LEVEL
+      level = EXEL.configuration.log_level || DEFAULT_LEVEL
       Logger.const_get(level.to_s.upcase)
     end
 

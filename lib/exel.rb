@@ -1,5 +1,6 @@
 require 'exel/version'
 require 'exel/logging'
+require 'ostruct'
 
 module EXEL
   def self.logger
@@ -11,7 +12,7 @@ module EXEL
   end
 
   def self.configuration
-    @config ||= {}
+    @config ||= OpenStruct.new
   end
 
   def self.configure
