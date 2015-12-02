@@ -38,10 +38,10 @@ module EXEL
     end
 
     def log_transaction(message = '')
-      transaction_start_time = Time.now.to_f
+      transaction_start_time = Time.now
       log_info "Started at #{transaction_start_time}"
       yield(transaction_start_time)
-      transaction_end_time = Time.now.to_f
+      transaction_end_time = Time.now
       log_info "Finished in #{(transaction_end_time - transaction_start_time).to_i} seconds #{message}"
     end
 
