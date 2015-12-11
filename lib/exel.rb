@@ -20,7 +20,7 @@ module EXEL
   end
 
   def self.async_provider
-    configuration.async_provider || Providers::LocalAsyncProvider
+    configuration.async_provider || Providers::ThreadedAsyncProvider
   end
 
   root = File.expand_path('../..', __FILE__)

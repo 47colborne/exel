@@ -6,11 +6,11 @@ module EXEL
       let(:block) { instance_double(SequenceNode) }
 
       before do
-        allow(EXEL).to receive(:async_provider).and_return(Providers::DummyAsyncProvider)
+        allow(EXEL).to receive(:async_provider).and_return(EXEL::Providers::DummyAsyncProvider)
       end
 
       it 'looks up the async provider on initialization' do
-        expect(processor.provider).to be_an_instance_of(Providers::DummyAsyncProvider)
+        expect(processor.provider).to be_an_instance_of(EXEL::Providers::DummyAsyncProvider)
       end
 
       describe '#process' do

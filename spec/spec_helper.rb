@@ -6,12 +6,14 @@ EXEL.configure do |config|
   config.aws = OpenStruct.new
 end
 
-module Providers
-  class DummyAsyncProvider
-    def initialize(_context)
-    end
+module EXEL
+  module Providers
+    class DummyAsyncProvider
+      def initialize(_context)
+      end
 
-    def do_async(_block)
+      def do_async(_block)
+      end
     end
   end
 end
