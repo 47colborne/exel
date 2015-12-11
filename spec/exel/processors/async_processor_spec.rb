@@ -1,13 +1,21 @@
 module EXEL
   module Processors
     describe AsyncProcessor do
-      subject(:processor) { AsyncProcessor.new(context) }
+      subject(:processor) { described_class.new(context) }
       let(:context) { EXEL::Context.new }
       let(:block) { instance_double(SequenceNode) }
 
+      before do
+        allow(EXEL).to receive(:async_provider).and_return(Providers::DummyAsyncProvider)
+      end
+
+      it 'looks up the async provider on initialization' do
+        expect(processor.provider).to be_an_instance_of(Providers::DummyAsyncProvider)
+      end
+
       describe '#process' do
-        it 'should call do_async on the async handler' do
-          expect(processor.handler).to receive(:do_async).with(block)
+        it 'calls do_async on the async provider' do
+          expect(processor.provider).to receive(:do_async).with(block)
           processor.process(block)
         end
       end
