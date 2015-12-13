@@ -2,7 +2,7 @@ module EXEL
   describe Job do
     describe '.define' do
       let(:ast) { instance_double(SequenceNode, run: nil, start: nil) }
-      let(:block) { Proc.new {} }
+      let(:block) { proc {} }
 
       after { Job.registry.clear }
 
@@ -37,7 +37,7 @@ module EXEL
 
       context 'with a job name' do
         context 'of a defined job' do
-          let(:block) { Proc.new {} }
+          let(:block) { proc {} }
 
           before do
             allow(Job).to receive(:registry).and_return(test_job: block)
@@ -103,7 +103,7 @@ module EXEL
 
       context 'given DSL code as a proc' do
         it 'should eval the code as a block' do
-          dsl_proc = Proc.new {}
+          dsl_proc = proc {}
           expect(parser).to receive(:instance_eval) do |*_args, &block|
             expect(block).to eq(dsl_proc)
           end
@@ -122,12 +122,12 @@ module EXEL
       end
 
       it 'should return the parsed AST' do
-        expect(Job::Parser.parse(Proc.new {})).to eq(ast)
+        expect(Job::Parser.parse(proc {})).to eq(ast)
       end
     end
 
     describe '#process' do
-      let(:block) { Proc.new {} }
+      let(:block) { proc {} }
 
       before do
         allow(Job::Parser).to receive(:parse).and_return(ast)
@@ -174,8 +174,8 @@ module EXEL
     end
 
     [
-        {method: :async, processor: Processors::AsyncProcessor},
-        {method: :split, processor: Processors::SplitProcessor}
+      {method: :async, processor: Processors::AsyncProcessor},
+      {method: :split, processor: Processors::SplitProcessor}
     ].each do |data|
       describe "##{data[:method]}" do
         before do
@@ -184,7 +184,7 @@ module EXEL
 
         it "should create a #{data[:method]} instruction" do
           expect(Instruction).to receive(:new).with(data[:method].to_s, data[:processor], {arg1: 'arg1_value'}, ast)
-          parser.send(data[:method], {arg1: 'arg1_value'}) {}
+          parser.send(data[:method], arg1: 'arg1_value') {}
         end
 
         it 'should parse the block given' do

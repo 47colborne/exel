@@ -12,7 +12,7 @@ module EXEL
     end
 
     def get(context)
-      keys.reduce(context) { |acc, key| acc[key] }
+      keys.reduce(context) { |a, e| a[e] }
     end
   end
 end

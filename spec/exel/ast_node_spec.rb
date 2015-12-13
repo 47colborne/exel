@@ -1,23 +1,14 @@
 module EXEL
   describe ASTNode do
-    let(:context) { {} }
-
-    def build_tree
-      @node_3 = ASTNode.new(instruction)
-      @node_4 = ASTNode.new(instruction)
-      @node_2 = ASTNode.new(instruction, [@node_3, @node_4])
-      @node_5 = ASTNode.new(instruction)
-      @node_1 = ASTNode.new(instruction, [@node_2, @node_5])
-    end
+    let(:context) { instance_double(EXEL::Context) }
 
     def instruction
       instance_double(Instruction, execute: nil)
     end
 
-    describe '#start' do
-      class TestNode < ASTNode
-      end
+    TestNode = Class.new(ASTNode)
 
+    describe '#start' do
       context 'when an JobTermination error bubbles up' do
         it 'should ensure the process fails silently' do
           node = TestNode.new(instruction)
@@ -29,9 +20,6 @@ module EXEL
     end
 
     describe '#run' do
-      class TestNode < ASTNode;
-      end
-
       it 'should raise an error if not implemented' do
         expect { TestNode.new(instruction).run(context) }.to raise_error 'EXEL::TestNode does not implement #process'
       end

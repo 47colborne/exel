@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = EXEL::VERSION
   spec.authors       = ['yroo']
   spec.email         = ['dev@yroo.com']
-  spec.summary       = %q{EXEL, the Elastic eXEcution Language}
-  spec.description   = %q{A DSL for defining jobs that can be run in a highly scalable manner}
+  spec.summary       = 'EXEL, the Elastic eXEcution Language'
+  spec.description   = 'A DSL for defining jobs that can be run in a highly scalable manner'
   spec.homepage      = 'https://github.com/47colborne/exel'
   spec.license       = 'MIT'
 
@@ -25,6 +25,10 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec', '~> 3'
   spec.add_development_dependency 'guard', '~> 2'
   spec.add_development_dependency 'guard-rspec', '~> 4'
+  spec.add_development_dependency 'guard-rubocop', '~> 1'
   spec.add_development_dependency 'terminal-notifier', '~> 1'
   spec.add_development_dependency 'terminal-notifier-guard', '~> 1'
+  spec.add_development_dependency 'rubocop', '~> 0'
+  spec.add_development_dependency 'rubocop-rspec', '~> 1'
+  spec.add_development_dependency 'rubocop-rspec-focused', '~> 0'
 end

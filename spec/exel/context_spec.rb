@@ -13,7 +13,7 @@ module EXEL
       let(:handler) { instance_double(Handlers::S3Handler, upload: nil) }
 
       before do
-        allow(Handlers::S3Handler).to receive(:new).and_return(handler) #TODO don't stub new
+        allow(Handlers::S3Handler).to receive(:new).and_return(handler) # TODO: don't stub new
       end
 
       it 'should write the serialized context to a file and upload it' do
@@ -40,11 +40,10 @@ module EXEL
 
     describe '.deserialize' do
       it 'should deserialize a given uri' do
-        uri = 'test_uri'
         file = StringIO.new(Marshal.dump(context))
-        expect_any_instance_of(Handlers::S3Handler).to receive(:download).with(uri).and_return(file)
+        expect_any_instance_of(Handlers::S3Handler).to receive(:download).with('uri').and_return(file)
 
-        expect(Context.deserialize(uri)).to eq(context)
+        expect(Context.deserialize('uri')).to eq(context)
 
         expect(file).to be_closed
       end
@@ -83,7 +82,7 @@ module EXEL
           it 'should return the lookup value from the context' do
             deferred_context_value = DeferredContextValue.new[:key]
             context[:hash] = {hash_key: deferred_context_value}
-            expect(context[:hash]).to eq({hash_key: context[:key]})
+            expect(context[:hash]).to eq(hash_key: context[:key])
           end
         end
 
@@ -97,7 +96,7 @@ module EXEL
           it 'should lookup a deferred context value in an array nested in a hash' do
             deferred_context_value = DeferredContextValue.new[:key]
             context[:nested] = {hash_key: [1, deferred_context_value]}
-            expect(context[:nested]).to eq({hash_key: [1, context[:key]]})
+            expect(context[:nested]).to eq(hash_key: [1, context[:key]])
           end
         end
       end
@@ -150,7 +149,7 @@ module EXEL
     end
 
     describe 'include?' do
-      subject(:context) { EXEL::Context.new(key1: 1, key2: 2, key3: 3)}
+      subject(:context) { EXEL::Context.new(key1: 1, key2: 2, key3: 3) }
 
       context 'context contains all key value pairs' do
         it 'should return true' do

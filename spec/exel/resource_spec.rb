@@ -12,19 +12,18 @@ module EXEL
       context 'when the passed in value is a file' do
         [File, Tempfile].each do |file_class|
           context "with a #{file_class}" do
-            before do
-              @file = instance_double(file_class)
-              allow(@file).to receive(:is_a?) { |klass| klass == file_class }
-            end
+            let(:file) { instance_double(file_class) }
+
+            before { allow(file).to receive(:is_a?) { |klass| klass == file_class } }
 
             it 'should upload the file to S3' do
-              expect_any_instance_of(Handlers::S3Handler).to receive(:upload).with(@file)
-              Resource.remotize(@file)
+              expect_any_instance_of(Handlers::S3Handler).to receive(:upload).with(file)
+              Resource.remotize(file)
             end
 
             it 'should return a remote file URI' do
-              allow_any_instance_of(Handlers::S3Handler).to receive(:upload).with(@file).and_return(s3_uri)
-              expect(Resource.remotize(@file)).to eq(s3_uri)
+              allow_any_instance_of(Handlers::S3Handler).to receive(:upload).with(file).and_return(s3_uri)
+              expect(Resource.remotize(file)).to eq(s3_uri)
             end
           end
         end

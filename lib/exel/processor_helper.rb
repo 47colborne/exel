@@ -1,6 +1,5 @@
 module EXEL
   module ProcessorHelper
-
     # Helper Methods
 
     def tag(*tags)
@@ -12,7 +11,7 @@ module EXEL
     end
 
     def file_size_in_mb(file)
-      "#{'%.2f' % (file.size.to_f / 1_024_000).round(2)} MB"
+      format('%.2f MB', file.size.to_f / 1_024_000)
     end
 
     # Logging Helpers
@@ -62,6 +61,5 @@ module EXEL
       time_to_sleep = duration.second.to_f - elapsed_time
       sleep(time_to_sleep) if time_to_sleep > 0
     end
-
   end
 end

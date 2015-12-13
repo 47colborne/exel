@@ -1,8 +1,8 @@
 module EXEL
-  class EXEL::Instruction
+  class Instruction
     attr_reader :name
 
-    def initialize(name, processor_class, args, subtree=nil)
+    def initialize(name, processor_class, args, subtree = nil)
       @name = name
       @processor_class = processor_class
       @args = args || {}

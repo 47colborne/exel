@@ -1,23 +1,16 @@
 module EXEL
   describe SequenceNode do
-    let(:context) { {} }
+    subject(:node) { described_class.new(instance_double(ASTNode), instance_double(ASTNode)) }
+    let(:context) { instance_double(EXEL::Context) }
 
-    def build_tree
-      @node_2 = instance_double(ASTNode)
-      @node_3 = instance_double(ASTNode)
-      @node_1 = SequenceNode.new(@node_2, @node_3)
-    end
-
-    it { is_expected.to be_kind_of(ASTNode) }
+    it { is_expected.to be_an(ASTNode) }
 
     describe '#run' do
-      before { build_tree }
-
       it 'should run each child node in sequence' do
-        expect(@node_2).to receive(:run).with(context).once.ordered
-        expect(@node_3).to receive(:run).with(context).once.ordered
+        expect(node.children.first).to receive(:run).with(context).once.ordered
+        expect(node.children.last).to receive(:run).with(context).once.ordered
 
-        @node_1.run(context)
+        node.run(context)
       end
     end
   end

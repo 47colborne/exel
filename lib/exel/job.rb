@@ -2,7 +2,7 @@ module EXEL
   module Job
     class << self
       def define(job_name, &block)
-        raise "Job #{job_name.inspect} is already defined" unless registry[job_name].nil?
+        fail "Job #{job_name.inspect} is already defined" unless registry[job_name].nil?
         registry[job_name] = block
       end
 
@@ -12,7 +12,7 @@ module EXEL
 
       def run(dsl_code_or_name, context = {})
         context = EXEL::Context.new(context) if context.is_a?(Hash)
-        (ast = parse(dsl_code_or_name)) ? ast.start(context) : raise(%(Job "#{dsl_code_or_name}" not found))
+        (ast = parse(dsl_code_or_name)) ? ast.start(context) : fail(%(Job "#{dsl_code_or_name}" not found))
       end
 
       private
@@ -49,11 +49,11 @@ module EXEL
         add_instruction_node('process', processor_class, block, options)
       end
 
-      def async(options={}, &block)
+      def async(options = {}, &block)
         add_instruction_node('async', Processors::AsyncProcessor, block, options)
       end
 
-      def split(options={}, &block)
+      def split(options = {}, &block)
         add_instruction_node('split', Processors::SplitProcessor, block, options)
       end
 
@@ -63,7 +63,7 @@ module EXEL
 
       private
 
-      def add_instruction_node(name, processor, block, args={})
+      def add_instruction_node(name, processor, block, args = {})
         sub_tree = block.nil? ? nil : Parser.parse(block)
         instruction = EXEL::Instruction.new(name, processor, args, sub_tree)
         node = sub_tree.nil? ? InstructionNode.new(instruction) : InstructionNode.new(instruction, [sub_tree])

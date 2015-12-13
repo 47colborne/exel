@@ -4,7 +4,7 @@ module EXEL
   class Context
     attr_reader :table
 
-    def initialize(initial_context={})
+    def initialize(initial_context = {})
       @table = initial_context
     end
 
@@ -43,7 +43,7 @@ module EXEL
     end
 
     def ==(other)
-      other.kind_of?(EXEL::Context) && table == other.table
+      other.is_a?(EXEL::Context) && table == other.table
     end
 
     def include?(values)
@@ -65,19 +65,19 @@ module EXEL
     end
 
     def get_deferred(value)
-      if is_deferred?(value)
+      if deferred?(value)
         value = value.get(self)
-      elsif value.kind_of?(Array)
+      elsif value.is_a?(Array)
         value.map! { |v| get_deferred(v) }
-      elsif value.kind_of?(Hash)
+      elsif value.is_a?(Hash)
         value.each { |k, v| value[k] = get_deferred(v) }
       end
 
       value
     end
 
-    def is_deferred?(value)
-      value.kind_of?(DeferredContextValue)
+    def deferred?(value)
+      value.is_a?(DeferredContextValue)
     end
   end
 end

@@ -1,0 +1,14 @@
+require:
+  - rubocop-rspec
+  - rubocop/rspec/focused
+
+inherit_from: .rubocop_todo.yml
+
+AllCops:
+  DisplayStyleGuide: true
+
+Metrics/LineLength:
+  Max: 120
+
+Style/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space

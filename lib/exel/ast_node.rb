@@ -2,7 +2,7 @@ module EXEL
   class ASTNode
     attr_reader :instruction, :children
 
-    def initialize(instruction, children=[])
+    def initialize(instruction, children = [])
       @instruction = instruction
       @children = children
     end
@@ -12,7 +12,7 @@ module EXEL
     end
 
     def run(_context)
-      raise "#{self.class} does not implement #process"
+      fail "#{self.class} does not implement #process"
     end
 
     def add_child(node)
