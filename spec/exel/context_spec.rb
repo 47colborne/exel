@@ -1,11 +1,11 @@
 module EXEL
   describe Context do
-    subject(:context) { EXEL::Context.new(test1: 'foo', test2: 2) }
+    subject(:context) { EXEL::Context.new(key1: '1', key2: 2) }
 
     describe '#initialize' do
       it 'should be able to initialize with a hash' do
-        expect(context.table[:test1]).to eq('foo')
-        expect(context.table[:test2]).to eq(2)
+        expect(context.table[:key1]).to eq('1')
+        expect(context.table[:key2]).to eq(2)
       end
     end
 
@@ -17,13 +17,13 @@ module EXEL
       end
 
       it 'should write the serialized context to a file and upload it' do
-        expect(Resource).to receive(:remotize).with(context[:test1]).and_return('remote_value1')
-        expect(Resource).to receive(:remotize).with(context[:test2]).and_return('remote_value2')
+        expect(Resource).to receive(:remotize).with(context[:key1]).and_return('remote_value1')
+        expect(Resource).to receive(:remotize).with(context[:key2]).and_return('remote_value2')
 
         expect(SecureRandom).to receive(:uuid).and_return('uuid')
 
         expect(handler).to receive(:upload) do |file|
-          expect(file.read).to eq(Marshal.dump(Context.new(test1: 'remote_value1', test2: 'remote_value2')))
+          expect(file.read).to eq(Marshal.dump(Context.new(key1: 'remote_value1', key2: 'remote_value2')))
           expect(file.path).to include('uuid')
           'file_uri'
         end
@@ -70,7 +70,8 @@ module EXEL
             expect(context[:deferred_value]).to eq(context[:key])
           end
         end
-        context 'in array' do
+
+        context 'in an array' do
           it 'should return the lookup value from the context' do
             deferred_context_value = DeferredContextValue.new[:key]
             context[:array] = [1, 2, deferred_context_value]
@@ -78,7 +79,7 @@ module EXEL
           end
         end
 
-        context 'in hash' do
+        context 'in a hash' do
           it 'should return the lookup value from the context' do
             deferred_context_value = DeferredContextValue.new[:key]
             context[:hash] = {hash_key: deferred_context_value}
@@ -92,6 +93,7 @@ module EXEL
             context[:nested] = [{}, {hash_key: deferred_context_value}]
             expect(context[:nested]).to eq([{}, {hash_key: context[:key]}])
           end
+
           it 'should lookup a deferred context value in an array nested in a hash' do
             deferred_context_value = DeferredContextValue.new[:key]
             context[:nested] = {hash_key: [1, deferred_context_value]}
@@ -147,5 +149,20 @@ module EXEL
       it { is_expected.to eq(context.dup) }
     end
 
+    describe 'include?' do
+      subject(:context) { EXEL::Context.new(key1: 1, key2: 2, key3: 3)}
+
+      context 'context contains all key value pairs' do
+        it 'should return true' do
+          expect(context).to include(key1: 1, key2: 2)
+        end
+      end
+
+      context 'context does not contain all key value pairs' do
+        it 'should return true' do
+          expect(context).not_to include(foo: 'bar', key2: 2)
+        end
+      end
+    end
   end
 end

@@ -46,6 +46,10 @@ module EXEL
       other.kind_of?(EXEL::Context) && table == other.table
     end
 
+    def include?(values)
+      @table.merge(values) == @table
+    end
+
     private
 
     def serialize_context(table)
