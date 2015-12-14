@@ -10,11 +10,7 @@ module EXEL
     end
 
     describe '#serialize' do
-      let(:handler) { instance_double(Handlers::S3Handler, upload: nil) }
-
-      before do
-        allow(Handlers::S3Handler).to receive(:new).and_return(handler) # TODO: don't stub new
-      end
+      before { allow(Resource).to receive(:upload) }
 
       it 'should write the serialized context to a file and upload it' do
         expect(Resource).to receive(:remotize).with(context[:key1]).and_return('remote_value1')
@@ -22,7 +18,7 @@ module EXEL
 
         expect(SecureRandom).to receive(:uuid).and_return('uuid')
 
-        expect(handler).to receive(:upload) do |file|
+        expect(Resource).to receive(:remotize) do |file|
           expect(file.read).to eq(Marshal.dump(Context.new(key1: 'remote_value1', key2: 'remote_value2')))
           expect(file.path).to include('uuid')
           'file_uri'
@@ -41,7 +37,7 @@ module EXEL
     describe '.deserialize' do
       it 'should deserialize a given uri' do
         file = StringIO.new(Marshal.dump(context))
-        expect_any_instance_of(Handlers::S3Handler).to receive(:download).with('uri').and_return(file)
+        expect(Resource).to receive(:localize).with('uri').and_return(file)
 
         expect(Context.deserialize('uri')).to eq(context)
 
@@ -50,15 +46,21 @@ module EXEL
     end
 
     describe '#[]' do
-      subject(:context) { EXEL::Context.new(key: Resource.remotize('value')) }
+      subject(:context) { EXEL::Context.new(key: 'value') }
 
-      it 'should return localized values' do
+      it 'should return the value' do
         expect(context[:key]).to eq('value')
       end
 
+      it 'should localize the returned value' do
+        expect(Resource).to receive(:localize).with('value').and_return('localized')
+        expect(context[:key]).to eq('localized')
+      end
+
       it 'should store the localized value' do
+        allow(Resource).to receive(:localize).with('value').and_return('localized')
         context[:key]
-        expect(context.table[:key]).to eq('value')
+        expect(context.table[:key]).to eq('localized')
       end
 
       context 'DeferredContextValue object' do

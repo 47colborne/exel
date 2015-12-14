@@ -10,13 +10,11 @@ module EXEL
 
     def serialize
       remotized_table = @table.each_with_object({}) { |(key, value), acc| acc[key] = EXEL::Resource.remotize(value) }
-      file = serialize_context(remotized_table)
-      upload(file)
+      EXEL::Resource.remotize(serialized_context(remotized_table))
     end
 
     def self.deserialize(uri)
-      handler = Handlers::S3Handler.new
-      file = handler.download(uri)
+      file = EXEL::Resource.localize(uri)
       context = Marshal.load(file.read)
       file.close
       context
@@ -52,16 +50,11 @@ module EXEL
 
     private
 
-    def serialize_context(table)
+    def serialized_context(table)
       file = Tempfile.new(SecureRandom.uuid, encoding: 'ascii-8bit')
       file.write(Marshal.dump(Context.new(table)))
       file.rewind
       file
-    end
-
-    def upload(file)
-      handler = Handlers::S3Handler.new
-      handler.upload(file)
     end
 
     def get_deferred(value)
