@@ -18,4 +18,24 @@ describe EXEL do
       end
     end
   end
+
+  describe '.remote_provider' do
+    context 'with no remote provider set in the configuration' do
+      it 'defaults to NullRemoteProvider' do
+        expect(EXEL.remote_provider).to eq(EXEL::Providers::LocalFileProvider)
+      end
+    end
+
+    context 'with no remote provider set in the configuration' do
+      before do
+        EXEL.configure do |config|
+          config.remote_provider = EXEL::Providers::DummyRemoteProvider
+        end
+      end
+
+      it 'returns the configurated remote provider' do
+        expect(EXEL.remote_provider).to eq(EXEL::Providers::DummyRemoteProvider)
+      end
+    end
+  end
 end

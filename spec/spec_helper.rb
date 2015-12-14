@@ -15,5 +15,13 @@ module EXEL
       def do_async(_block)
       end
     end
+
+    class DummyRemoteProvider
+      def upload(_file)
+      end
+
+      def download(_uri)
+      end
+    end
   end
 end
