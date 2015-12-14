@@ -12,3 +12,6 @@ Metrics/LineLength:
 
 Style/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
+
+RSpec/DescribedClass:
+  Enabled: false
