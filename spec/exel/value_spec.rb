@@ -1,11 +1,11 @@
 module EXEL
-  describe Resource do
+  describe Value do
     let(:s3_uri) { 's3://test_file.csv' }
 
     describe '.remotize' do
       context 'when the value is not a file' do
         it 'returns the value' do
-          expect(Resource.remotize('test string')).to eq('test string')
+          expect(Value.remotize('test string')).to eq('test string')
         end
       end
 
@@ -17,12 +17,12 @@ module EXEL
 
           it 'uploads the file to S3' do
             expect_any_instance_of(Handlers::S3Handler).to receive(:upload).with(file)
-            Resource.remotize(file)
+            Value.remotize(file)
           end
 
           it 'returns the URI of the uploaded file' do
             allow_any_instance_of(Handlers::S3Handler).to receive(:upload).with(file).and_return(s3_uri)
-            expect(Resource.remotize(file)).to eq(s3_uri)
+            expect(Value.remotize(file)).to eq(s3_uri)
           end
         end
       end
@@ -31,7 +31,7 @@ module EXEL
     describe '.localize' do
       context 'with a local value' do
         it 'returns the value' do
-          expect(Resource.localize('test')).to eq('test')
+          expect(Value.localize('test')).to eq('test')
         end
       end
 
@@ -40,7 +40,7 @@ module EXEL
           file = double(:file)
           expect_any_instance_of(Handlers::S3Handler).to receive(:download).with(s3_uri).and_return(file)
 
-          expect(Resource.localize(s3_uri)).to eq(file)
+          expect(Value.localize(s3_uri)).to eq(file)
         end
       end
     end

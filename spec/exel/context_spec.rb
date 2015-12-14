@@ -10,15 +10,15 @@ module EXEL
     end
 
     describe '#serialize' do
-      before { allow(Resource).to receive(:upload) }
+      before { allow(Value).to receive(:upload) }
 
       it 'should write the serialized context to a file and upload it' do
-        expect(Resource).to receive(:remotize).with(context[:key1]).and_return('remote_value1')
-        expect(Resource).to receive(:remotize).with(context[:key2]).and_return('remote_value2')
+        expect(Value).to receive(:remotize).with(context[:key1]).and_return('remote_value1')
+        expect(Value).to receive(:remotize).with(context[:key2]).and_return('remote_value2')
 
         expect(SecureRandom).to receive(:uuid).and_return('uuid')
 
-        expect(Resource).to receive(:remotize) do |file|
+        expect(Value).to receive(:remotize) do |file|
           expect(file.read).to eq(Marshal.dump(Context.new(key1: 'remote_value1', key2: 'remote_value2')))
           expect(file.path).to include('uuid')
           'file_uri'
@@ -37,7 +37,7 @@ module EXEL
     describe '.deserialize' do
       it 'should deserialize a given uri' do
         file = StringIO.new(Marshal.dump(context))
-        expect(Resource).to receive(:localize).with('uri').and_return(file)
+        expect(Value).to receive(:localize).with('uri').and_return(file)
 
         expect(Context.deserialize('uri')).to eq(context)
 
@@ -53,12 +53,12 @@ module EXEL
       end
 
       it 'should localize the returned value' do
-        expect(Resource).to receive(:localize).with('value').and_return('localized')
+        expect(Value).to receive(:localize).with('value').and_return('localized')
         expect(context[:key]).to eq('localized')
       end
 
       it 'should store the localized value' do
-        allow(Resource).to receive(:localize).with('value').and_return('localized')
+        allow(Value).to receive(:localize).with('value').and_return('localized')
         context[:key]
         expect(context.table[:key]).to eq('localized')
       end

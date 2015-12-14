@@ -9,19 +9,19 @@ module EXEL
     end
 
     def serialize
-      remotized_table = @table.each_with_object({}) { |(key, value), acc| acc[key] = EXEL::Resource.remotize(value) }
-      EXEL::Resource.remotize(serialized_context(remotized_table))
+      remotized_table = @table.each_with_object({}) { |(key, value), acc| acc[key] = EXEL::Value.remotize(value) }
+      EXEL::Value.remotize(serialized_context(remotized_table))
     end
 
     def self.deserialize(uri)
-      file = EXEL::Resource.localize(uri)
+      file = EXEL::Value.localize(uri)
       context = Marshal.load(file.read)
       file.close
       context
     end
 
     def [](key)
-      value = EXEL::Resource.localize(@table[key])
+      value = EXEL::Value.localize(@table[key])
       value = get_deferred(value)
       @table[key] = value
       value

@@ -1,5 +1,5 @@
 module EXEL
-  module Resource
+  module Value
     def self.remotize(value)
       file?(value) ? upload(value) : value
     end
