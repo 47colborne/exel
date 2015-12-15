@@ -16,15 +16,15 @@ module EXEL
       end
 
       def upload(file)
-        Handlers::S3Handler.new.upload(file)
+        EXEL.remote_provider.new.upload(file)
       end
 
       def remote?(value)
-        value =~ %r{^s3://}
+        EXEL.remote_provider.remote?(value)
       end
 
       def download(uri)
-        Handlers::S3Handler.new.download(uri)
+        EXEL.remote_provider.new.download(uri)
       end
     end
   end

@@ -1,11 +1,13 @@
 module EXEL
   describe Value do
-    let(:s3_uri) { 's3://test_file.csv' }
+    let(:uri) { 's3://test_file.csv' }
+
+    before { allow(EXEL).to receive(:remote_provider).and_return(EXEL::Providers::DummyRemoteProvider) }
 
     describe '.remotize' do
       context 'when the value is not a file' do
         it 'returns the value' do
-          expect(Value.remotize('test string')).to eq('test string')
+          expect(Value.remotize('test')).to eq('test')
         end
       end
 
@@ -15,14 +17,14 @@ module EXEL
 
           before { allow(file).to receive(:is_a?) { |klass| klass == file_class } }
 
-          it 'uploads the file to S3' do
-            expect_any_instance_of(Handlers::S3Handler).to receive(:upload).with(file)
+          it 'uploads the file using the remote provider' do
+            expect_any_instance_of(EXEL::Providers::DummyRemoteProvider).to receive(:upload).with(file)
             Value.remotize(file)
           end
 
           it 'returns the URI of the uploaded file' do
-            allow_any_instance_of(Handlers::S3Handler).to receive(:upload).with(file).and_return(s3_uri)
-            expect(Value.remotize(file)).to eq(s3_uri)
+            allow_any_instance_of(EXEL::Providers::DummyRemoteProvider).to receive(:upload).with(file).and_return(uri)
+            expect(Value.remotize(file)).to eq(uri)
           end
         end
       end
@@ -37,10 +39,11 @@ module EXEL
 
       context 'with a remote file' do
         it 'returns the downloaded file' do
+          expect(EXEL::Providers::DummyRemoteProvider).to receive(:remote?).with(uri).and_return(true)
           file = double(:file)
-          expect_any_instance_of(Handlers::S3Handler).to receive(:download).with(s3_uri).and_return(file)
+          expect_any_instance_of(EXEL::Providers::DummyRemoteProvider).to receive(:download).with(uri).and_return(file)
 
-          expect(Value.localize(s3_uri)).to eq(file)
+          expect(Value.localize(uri)).to eq(file)
         end
       end
     end

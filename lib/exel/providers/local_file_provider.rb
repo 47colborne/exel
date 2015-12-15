@@ -9,6 +9,10 @@ module EXEL
         fail 'URI must begin with "file://"' unless uri.start_with? 'file://'
         File.open(uri.split('file://').last)
       end
+
+      def self.remote?(uri)
+        uri =~ %r{file://}
+      end
     end
   end
 end

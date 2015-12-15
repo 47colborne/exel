@@ -22,6 +22,9 @@ module EXEL
 
       def download(_uri)
       end
+
+      def self.remote?(_uri)
+      end
     end
   end
 end

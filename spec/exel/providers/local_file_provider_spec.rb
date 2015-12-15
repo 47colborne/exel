@@ -19,6 +19,18 @@ module EXEL
           expect { subject.download('s3://') }.to raise_error 'URI must begin with "file://"'
         end
       end
+
+      describe '.remote?' do
+        it 'returns true for file:// URIs' do
+          expect(LocalFileProvider.remote?('file:///path/to/file')).to be_truthy
+        end
+
+        it 'returns false for anything else' do
+          expect(LocalFileProvider.remote?('s3://file')).to be_falsey
+          expect(LocalFileProvider.remote?(1)).to be_falsey
+          expect(LocalFileProvider.remote?(nil)).to be_falsey
+        end
+      end
     end
   end
 end
