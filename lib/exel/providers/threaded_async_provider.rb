@@ -6,7 +6,7 @@ module EXEL
       end
 
       def do_async(block)
-        Thread.new { block.start(@context) }
+        Thread.new { block.start(@context.deep_dup) }
       end
     end
   end
