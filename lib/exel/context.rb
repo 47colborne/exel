@@ -8,9 +8,12 @@ module EXEL
       @table = initial_context
     end
 
+    def deep_dup
+      Context.deserialize(serialize)
+    end
+
     def serialize
-      remotized_table = @table.each_with_object({}) { |(key, value), acc| acc[key] = EXEL::Value.remotize(value) }
-      EXEL::Value.remotize(serialized_context(remotized_table))
+      EXEL::Value.remotize(serialized_context)
     end
 
     def self.deserialize(uri)
@@ -50,11 +53,15 @@ module EXEL
 
     private
 
-    def serialized_context(table)
+    def serialized_context
       file = Tempfile.new(SecureRandom.uuid, encoding: 'ascii-8bit')
-      file.write(Marshal.dump(Context.new(table)))
+      file.write(Marshal.dump(Context.new(remotized_table)))
       file.rewind
       file
+    end
+
+    def remotized_table
+      @table.each_with_object({}) { |(key, value), acc| acc[key] = EXEL::Value.remotize(value) }
     end
 
     def get_deferred(value)

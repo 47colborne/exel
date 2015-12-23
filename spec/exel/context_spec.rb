@@ -9,6 +9,19 @@ module EXEL
       end
     end
 
+    describe '#deep_dup' do
+      it 'returns a deep copy of itself' do
+        context[:a] = {nested: []}
+
+        dup = context.deep_dup
+        expect(context).to eq(dup)
+        expect(context).to_not be_equal(dup)
+
+        dup[:a][:nested] << 1
+        expect(context[:a][:nested]).to be_empty
+      end
+    end
+
     describe '#serialize' do
       before { allow(Value).to receive(:upload) }
 
