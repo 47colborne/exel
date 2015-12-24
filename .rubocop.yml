@@ -15,3 +15,7 @@ Style/SpaceInsideHashLiteralBraces:
 
 RSpec/DescribedClass:
   Enabled: false
+
+Metrics/ModuleLength:
+  Exclude:
+    - 'spec/**/*'
