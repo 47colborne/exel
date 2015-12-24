@@ -7,44 +7,33 @@ module EXEL
     class SplitProcessor
       include EXEL::ProcessorHelper
 
-      attr_accessor :chunk_size, :file_name, :block
+      attr_accessor :file_name, :block
 
       DEFAULT_CHUNK_SIZE = 1000
 
       def initialize(context)
-        @chunk_size = DEFAULT_CHUNK_SIZE
         @buffer = []
         @tempfile_count = 0
         @context = context
-
         @file = context[:resource]
-        @file_name = filename(@file)
-        @csv_options = context[:csv_options] || {col_sep: ','}
 
         log_prefix_with '[SplitProcessor]'
       end
 
       def process(callback)
         log_process do
-          begin
-            CSV.foreach(@file.path, @csv_options) do |line|
-              process_line(line, callback)
-            end
-          rescue CSV::MalformedCSVError => e
-            log_error "CSV::MalformedCSVError => #{e.message}"
-          end
-          process_line(:eof, callback)
-          File.delete(@file.path)
+          process_file(callback)
+          finish(callback)
         end
       end
 
       def process_line(line, callback)
         if line == :eof
-          flush_buffer callback
+          flush_buffer(callback)
         else
           @buffer << CSV.generate_line(line)
 
-          flush_buffer callback if buffer_full?
+          flush_buffer(callback) if buffer_full?
         end
       end
 
@@ -54,12 +43,41 @@ module EXEL
         chunk.write(content)
         chunk.rewind
 
-        log_info "Generated chunk # #{@tempfile_count} for file #{@file_name} in #{chunk.path}"
+        log_info "Generated chunk # #{@tempfile_count} for file #{filename(@file)} in #{chunk.path}"
         chunk
       end
 
+      private
+
+      def process_file(callback)
+        csv_options = @context[:csv_options] || {col_sep: ','}
+
+        CSV.foreach(@file.path, csv_options) do |line|
+          process_line(line, callback)
+        end
+      rescue CSV::MalformedCSVError => e
+        log_error "CSV::MalformedCSVError => #{e.message}"
+      end
+
+      def flush_buffer(callback)
+        unless @buffer.empty?
+          file = generate_chunk(@buffer.join(''))
+          callback.run(@context.merge!(resource: file))
+        end
+
+        @buffer = []
+      end
+
+      def buffer_full?
+        @buffer.size == chunk_size
+      end
+
+      def chunk_size
+        DEFAULT_CHUNK_SIZE
+      end
+
       def chunk_filename
-        "#{@file_name}_#{@tempfile_count}_"
+        "#{filename(@file)}_#{@tempfile_count}_"
       end
 
       def filename(file)
@@ -67,18 +85,9 @@ module EXEL
         file_name_with_extension.split('.').first
       end
 
-      private
-
-      def flush_buffer(callback)
-        unless @buffer.empty?
-          file = generate_chunk(@buffer.join(''))
-          callback.run(@context.merge!(resource: file))
-        end
-        @buffer = []
-      end
-
-      def buffer_full?
-        @buffer.size == @chunk_size
+      def finish(callback)
+        process_line(:eof, callback)
+        File.delete(@file.path)
       end
     end
   end

@@ -43,7 +43,7 @@ module EXEL
           {input: 4, chunks: %W(0\n1\n 2\n3\n)}
         ].each do |data|
           it "should produce #{data[:chunks].size} chunks with #{data[:input]} input lines" do
-            splitter.chunk_size = 2
+            allow(splitter).to receive(:chunk_size).and_return(2)
 
             data[:chunks].each do |chunk|
               expect(splitter).to receive(:generate_chunk).with(chunk).and_return(chunk_file)
@@ -67,10 +67,8 @@ module EXEL
 
         it 'should create a file with a unique name' do
           3.times do |i|
-            index = i + 1
-            file = splitter.generate_chunk("#{index}")
-            file_name = splitter.filename(file)
-            expect(file_name).to include("text_#{index}_")
+            file = splitter.generate_chunk('content')
+            expect(file.path).to include("text_#{i + 1}_")
           end
         end
       end
@@ -83,7 +81,7 @@ module EXEL
           content << line
         end
 
-        StringIO.new content
+        StringIO.new(content)
       end
     end
   end
