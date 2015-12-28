@@ -39,7 +39,7 @@ TODO
 
 * ```process``` Execute the given processor class (specified by the ```:with``` option), given the current context and any additional arguments provided
 
-* ```split``` Split the input data into 1000 line chunks and run the given block for each chunk. Assumes that the input data is a CSV formatted file referenced by ```context[:resoource]```. When each block is run, ```context[:resource]``` will reference to the chunk file.
+* ```split``` Split the input data into 1000 line chunks and run the given block for each chunk. Assumes that the input data is a CSV formatted file referenced by ```context[:resource]```. When each block is run, ```context[:resource]``` will reference to the chunk file.
 * ```async``` Asynchronously run the given block. Uses the configured async provider to execute the block.
 
 ### Example job
