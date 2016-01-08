@@ -29,16 +29,35 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: add more detail
+### Processors
+
+A processor can be any class that provides the following interface:
+
+    class MyProcessor
+        def initialize(context)
+            # typically context is assigned to @context here
+        end
+        
+        def process(block)
+            # do your work here
+        end
+    end
+
+Processors are initialized immediately before ```#process``` is called, allowing them to set up any state that they need from the context. The ```#process``` method is where your processing logic will be implemented. Processors should be focused on performing one particular aspect of the processing that you want to accomplish, allowing your job to be composed of a sequence of small processing steps. If a block was given in the call to ```process``` in the job DSL, it will be passed as the argument to ```#process``` and can be run with: ```block.run(@context)```
 
 ### The Context
 
-TODO
+The ```Context``` class has a Hash-like interface and acts as shared storage for the various processors that make up a job. Processors take their expected inputs from the context, and place any resulting outputs there for subsequent processors to access. Values are typically placed in the context through the following means:
+
+* Initial context set up before the job is run
+* Arguments passed to processors in the job DSL
+* Outputs assigned by processors during processing
+
+If you use EXEL with an async provider, such as [exel-sidekiq](https://github.com/47colborne/exel-sidekiq), and a remote provider, such as [exel-s3](https://github.com/47colborne/exel-s3), a context switch will occur when the ```async``` command is executed. Context shifts involve serializing the context and uploading it via the remote provider, then downloading and deserializing it when the async block is eventually run. This allows the processors to pass the results of their process through the sequence of processors in the job, without having to be concerned with when, where, or how those processors will be run.
 
 ### Supported Commands
 
 * ```process``` Execute the given processor class (specified by the ```:with``` option), given the current context and any additional arguments provided
-
 * ```split``` Split the input data into 1000 line chunks and run the given block for each chunk. Assumes that the input data is a CSV formatted file referenced by ```context[:resource]```. When each block is run, ```context[:resource]``` will reference to the chunk file.
 * ```async``` Asynchronously run the given block. Uses the configured async provider to execute the block.
 
@@ -60,7 +79,7 @@ TODO
         end
     end
 
-Elsewhere in your application, you could run the job like so:
+Elsewhere in your application, you could run this job as follows:
 
     def run_example_job(file_path)
         context = EXEL::Context.new(file_path: file_path, user: 'username')
