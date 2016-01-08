@@ -6,12 +6,12 @@ module EXEL
 
       after { Job.registry.clear }
 
-      it 'should register job definitions' do
+      it 'registers job definitions' do
         Job.define :test_job, &block
         expect(Job.registry[:test_job]).to eq(block)
       end
 
-      it 'should raise an exception if a job name is already in use' do
+      it 'raises an exception if a job name is already in use' do
         Job.define :test_job, &block
         expect { Job.define :test_job, &block }.to raise_error 'Job :test_job is already defined'
       end
@@ -22,13 +22,13 @@ module EXEL
       let(:context) { instance_double(Context) }
 
       context 'with a string of DSL code' do
-        it 'should parse the code' do
+        it 'parses the code' do
           dsl_code = 'code'
           expect(Job::Parser).to receive(:parse).with(dsl_code).and_return(ast)
           Job.run(dsl_code, context)
         end
 
-        it 'should run ast returned by the parser' do
+        it 'runs the AST returned by the parser' do
           allow(Job::Parser).to receive(:parse).and_return(ast)
           expect(ast).to receive(:start).with(context)
           Job.run('code', context)
@@ -43,7 +43,7 @@ module EXEL
             allow(Job).to receive(:registry).and_return(test_job: block)
           end
 
-          it 'should run the job' do
+          it 'runs the job' do
             expect(Job::Parser).to receive(:parse).with(block).and_return(ast)
             expect(ast).to receive(:start).with(context)
             Job.run(:test_job, context)
@@ -51,7 +51,7 @@ module EXEL
         end
 
         context 'of a undefined job' do
-          it 'should return nil' do
+          it 'returns nil' do
             expect { Job.run(:test_job, context) }.to raise_error('Job "test_job" not found')
           end
         end
@@ -64,11 +64,11 @@ module EXEL
           context[:array] << context[:arg]
         end
 
-        def process(callback)
+        def process(_callback)
         end
       end
 
-      it 'should not persist between runs' do
+      it 'does not persist between runs' do
         Job.define :test do
           process with: TestProcessor, array: [], arg: context[:value]
         end
@@ -89,7 +89,7 @@ module EXEL
     let(:ast) { instance_double(SequenceNode, run: nil) }
 
     describe '#initialize' do
-      it 'should initialize a sequence node' do
+      it 'initializes a sequence node' do
         expect(parser.ast).to be_kind_of(SequenceNode)
       end
     end
@@ -102,7 +102,7 @@ module EXEL
       end
 
       context 'given DSL code as a proc' do
-        it 'should eval the code as a block' do
+        it 'evals the code as a block' do
           dsl_proc = proc {}
           expect(parser).to receive(:instance_eval) do |*_args, &block|
             expect(block).to eq(dsl_proc)
@@ -113,7 +113,7 @@ module EXEL
       end
 
       context 'given DSL code as a string' do
-        it 'should eval the code as a string' do
+        it 'evals the code as a string' do
           dsl_code = 'code'
           expect(parser).to receive(:instance_eval).with(dsl_code)
 
@@ -121,7 +121,7 @@ module EXEL
         end
       end
 
-      it 'should return the parsed AST' do
+      it 'returns the parsed AST' do
         expect(Job::Parser.parse(proc {})).to eq(ast)
       end
     end
@@ -134,14 +134,14 @@ module EXEL
       end
 
       context 'without a block' do
-        it 'should create a process instruction' do
+        it 'creates a process instruction' do
           processor_class = double(:processor_class)
           expect(Instruction).to receive(:new).with('process', processor_class, {arg1: 'arg1_value'}, nil)
 
           parser.process with: processor_class, arg1: 'arg1_value'
         end
 
-        it 'should append an instruction node to the AST with no children' do
+        it 'appends an instruction node to the AST with no children' do
           expect(parser.ast).to receive(:add_child) do |node|
             expect(node).to be_a_kind_of(InstructionNode)
             expect(node.instruction.name).to eq('process')
@@ -153,7 +153,7 @@ module EXEL
       end
 
       context 'with a block' do
-        it 'should pass the parsed subtree to the instruction' do
+        it 'passes the parsed subtree to the instruction' do
           processor_class = double(:processor_class)
           expect(Job::Parser).to receive(:parse).with(block).and_return(ast)
           expect(Instruction).to receive(:new).with('process', processor_class, {arg1: 'arg1_value'}, ast)
@@ -161,7 +161,7 @@ module EXEL
           parser.process with: processor_class, arg1: 'arg1_value', &block
         end
 
-        it 'should append an instruction node to the AST with the parsed block as its subtree' do
+        it 'appends an instruction node to the AST with the parsed block as its subtree' do
           expect(parser.ast).to receive(:add_child) do |node|
             expect(node).to be_a_kind_of(InstructionNode)
             expect(node.instruction.name).to eq('process')
@@ -182,19 +182,19 @@ module EXEL
           allow(Job::Parser).to receive(:parse).and_return(ast)
         end
 
-        it "should create a #{data[:method]} instruction" do
+        it "creates a #{data[:method]} instruction" do
           expect(Instruction).to receive(:new).with(data[:method].to_s, data[:processor], {arg1: 'arg1_value'}, ast)
           parser.send(data[:method], arg1: 'arg1_value') {}
         end
 
-        it 'should parse the block given' do
+        it 'parses the block given' do
           block = -> {}
           expect(Job::Parser).to receive(:parse).with(block).and_return(ast)
 
           parser.send(data[:method], &block)
         end
 
-        it 'should add parsed subtree and instruction to the AST' do
+        it 'adds parsed subtree and instruction to the AST' do
           expect(parser.ast).to receive(:add_child) do |node|
             expect(node).to be_a_kind_of(InstructionNode)
             expect(node.instruction.name).to eq(data[:method].to_s)
@@ -207,7 +207,7 @@ module EXEL
     end
 
     describe '#context' do
-      it 'should return a DeferredContextValue' do
+      it 'returns a DeferredContextValue' do
         expect(parser.context).to be_a_kind_of(DeferredContextValue)
       end
     end

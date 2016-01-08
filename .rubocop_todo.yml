@@ -16,7 +16,6 @@ RSpec/ExampleWording:
     - 'spec/exel/handlers/s3_handler_spec.rb'
     - 'spec/exel/instruction_node_spec.rb'
     - 'spec/exel/instruction_spec.rb'
-    - 'spec/exel/job_spec.rb'
     - 'spec/exel/logging_spec.rb'
     - 'spec/exel/processors/split_processor_spec.rb'
     - 'spec/exel/resource_spec.rb'
