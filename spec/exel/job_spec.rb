@@ -175,7 +175,8 @@ module EXEL
 
     [
       {method: :async, processor: Processors::AsyncProcessor},
-      {method: :split, processor: Processors::SplitProcessor}
+      {method: :split, processor: Processors::SplitProcessor},
+      {method: :run, processor: Processors::RunProcessor}
     ].each do |data|
       describe "##{data[:method]}" do
         before do

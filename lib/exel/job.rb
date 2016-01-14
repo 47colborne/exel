@@ -57,6 +57,10 @@ module EXEL
         add_instruction_node('split', Processors::SplitProcessor, block, options)
       end
 
+      def run(options = {}, &block)
+        add_instruction_node('run', Processors::RunProcessor, block, options)
+      end
+
       def context
         DeferredContextValue.new
       end
