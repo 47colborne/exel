@@ -1,4 +1,10 @@
+require 'pry'
+
 Dir[File.expand_path('../../lib/**/*.rb', __FILE__)].each { |f| require f }
+
+# Requires supporting ruby files with custom matchers and macros, etc,
+# in spec/support/ and its subdirectories.
+Dir[File.expand_path('spec/support/**/*.rb')].each { |f| require f }
 
 EXEL.logger = nil
 

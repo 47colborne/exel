@@ -38,4 +38,11 @@ describe EXEL do
       end
     end
   end
+
+  after :all do
+    EXEL.configure do |config|
+      config.remote_provider = nil # reset providers to default
+      config.async_provider = nil
+    end
+  end
 end
