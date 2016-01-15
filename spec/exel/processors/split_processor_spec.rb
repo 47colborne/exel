@@ -34,6 +34,14 @@ module EXEL
 
           splitter.process(callback)
         end
+
+        it 'should not delete the resource file if :delete_resource is set to false in the context' do
+          allow(CSV).to receive(:foreach).and_yield(:eof)
+          expect(File).not_to receive(:delete).with(file.path)
+
+          context[:delete_resource] = false
+          splitter.process(callback)
+        end
       end
 
       describe '#process_line' do
@@ -43,7 +51,7 @@ module EXEL
           {input: 4, chunks: %W(0\n1\n 2\n3\n)}
         ].each do |data|
           it "should produce #{data[:chunks].size} chunks with #{data[:input]} input lines" do
-            allow(splitter).to receive(:chunk_size).and_return(2)
+            context[:chunk_size] = 2
 
             data[:chunks].each do |chunk|
               expect(splitter).to receive(:generate_chunk).with(chunk).and_return(chunk_file)

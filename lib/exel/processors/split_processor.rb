@@ -16,6 +16,7 @@ module EXEL
         @tempfile_count = 0
         @context = context
         @file = context[:resource]
+        @context[:delete_resource] = true if @context[:delete_resource].nil?
 
         log_prefix_with '[SplitProcessor]'
       end
@@ -73,7 +74,7 @@ module EXEL
       end
 
       def chunk_size
-        DEFAULT_CHUNK_SIZE
+        @context[:chunk_size] || DEFAULT_CHUNK_SIZE
       end
 
       def chunk_filename
@@ -87,7 +88,7 @@ module EXEL
 
       def finish(callback)
         process_line(:eof, callback)
-        File.delete(@file.path)
+        File.delete(@file.path) if @context[:delete_resource]
       end
     end
   end
