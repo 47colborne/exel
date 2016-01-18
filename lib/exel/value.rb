@@ -1,4 +1,5 @@
 module EXEL
+  # Contains methods to handle remote and local values. Used for {Context} serialization
   module Value
     def self.remotize(value)
       file?(value) ? upload(value) : value

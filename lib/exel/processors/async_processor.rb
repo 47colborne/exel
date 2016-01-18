@@ -2,6 +2,7 @@ require_relative '../processor_helper'
 
 module EXEL
   module Processors
+    # Implements the +async+ instruction by using the configured async provider to run a block asynchronously.
     class AsyncProcessor
       include EXEL::ProcessorHelper
       attr_reader :provider

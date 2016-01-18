@@ -4,13 +4,22 @@ require_relative '../processor_helper'
 
 module EXEL
   module Processors
+    # Implements the +split+ instruction. Used to concurrently process a large file by splitting it into small chunks to
+    # be separately processed.
+    #
+    # =Supported Context Options
+    # * +:delete_resource+ Defaults to true, can be set to false to preserve the original resource. Otherwise, it will
+    #   be deleted when splitting is complete
+    # * +:chunk_size+ Set to specify the number of lines that each chunk should contain
     class SplitProcessor
       include EXEL::ProcessorHelper
 
       attr_accessor :file_name, :block
 
+      # Number of lines to include in each chunk. Can be overridden by setting :chunk_size in the context
       DEFAULT_CHUNK_SIZE = 1000
 
+      # The context must contain a CSV File object in context[:resource]
       def initialize(context)
         @buffer = []
         @tempfile_count = 0

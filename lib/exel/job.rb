@@ -1,15 +1,28 @@
 module EXEL
+  # The +Job+ module provides the main interface for defining and running EXEL jobs
   module Job
     class << self
+      # Registers a new job
+      #
+      # @param job_name [Symbol] A symbol to set as the name of this job. Used to run it later.
+      # @param block A block of code that calls the EXEL DSL methods
       def define(job_name, &block)
         fail "Job #{job_name.inspect} is already defined" unless registry[job_name].nil?
         registry[job_name] = block
       end
 
+      # @return [Hash] A hash of all the defined jobs
       def registry
         @registry ||= {}
       end
 
+      # If given a symbol as the first parameter, it attempts to run a previously registered job using that name.
+      # Alternatively, a string of code can be passed to be parsed and run directly.
+      #
+      # @param dsl_code_or_name [String, Symbol] As a symbol, the name of a registered job. As a string, the EXEL code
+      #   to be run.
+      # @param context [Context, Hash] (Optional) The initial {Context} to be passed to the job.
+      # @raise If no job has been registered with the given name
       def run(dsl_code_or_name, context = {})
         context = EXEL::Context.new(context) if context.is_a?(Hash)
         (ast = parse(dsl_code_or_name)) ? ast.start(context) : fail(%(Job "#{dsl_code_or_name}" not found))
@@ -27,6 +40,7 @@ module EXEL
       end
     end
 
+    # Defines the EXEL DSL methods and is used to convert a block of Ruby code into an abstract syntax tree (AST)
     class Parser
       attr_reader :ast
 

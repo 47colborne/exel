@@ -1,10 +1,8 @@
 module EXEL
   module Error
-    # Inherit from Exception rather then StandardError
-    # because rescue => e will only catch StandardError
-    # and allow the Exception to propagate to the root
-    # of the job
-    class JobTermination < Exception
+    # If a processor raises a JobTermination exception, the job will immediately stop running without raising anything.
+    # This is useful if you want to stop a job without triggering any kind of retry mechanism, for example.
+    class JobTermination < Exception # Inherit from Exception so it won't be rescued and can propagate to ASTNode#start
     end
   end
 end

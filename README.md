@@ -53,9 +53,9 @@ The ```Context``` class has a Hash-like interface and acts as shared storage for
 * Arguments passed to processors in the job DSL
 * Outputs assigned by processors during processing
 
-If you use EXEL with an async provider, such as [exel-sidekiq](https://github.com/47colborne/exel-sidekiq), and a remote provider, such as [exel-s3](https://github.com/47colborne/exel-s3), a context switch will occur when the ```async``` command is executed. Context shifts involve serializing the context and uploading it via the remote provider, then downloading and deserializing it when the async block is eventually run. This allows the processors to pass the results of their process through the sequence of processors in the job, without having to be concerned with when, where, or how those processors will be run.
+If you use EXEL with an async provider, such as [exel-sidekiq](https://github.com/47colborne/exel-sidekiq), and a remote provider, such as [exel-s3](https://github.com/47colborne/exel-s3), a context switch will occur when the ```async``` instruction is executed. Context shifts involve serializing the context and uploading it via the remote provider, then downloading and deserializing it when the async block is eventually run. This allows the processors to pass the results of their process through the sequence of processors in the job, without having to be concerned with when, where, or how those processors will be run.
 
-### Supported Commands
+### Supported Instructions
 
 * ```process``` Execute the given processor class (specified by the ```:with``` option), given the current context and any additional arguments provided
 * ```split``` Split the input data into 1000 line chunks and run the given block for each chunk. Assumes that the input data is a CSV formatted file referenced by ```context[:resource]```. When each block is run, ```context[:resource]``` will reference to the chunk file.

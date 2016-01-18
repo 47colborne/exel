@@ -1,7 +1,6 @@
 module EXEL
+  # Helper methods useful to processors
   module ProcessorHelper
-    # Helper Methods
-
     def tag(*tags)
       tags.map { |t| "[#{t}]" }.join('')
     end
@@ -13,8 +12,6 @@ module EXEL
     def file_size_in_mb(file)
       format('%.2f MB', file.size.to_f / 1_024_000)
     end
-
-    # Logging Helpers
 
     def log_prefix_with(prefix)
       @log_prefix = (@context[:log_prefix] || '') + prefix

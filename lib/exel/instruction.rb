@@ -1,4 +1,5 @@
 module EXEL
+  # Represents one step to be executed in the processing of a job
   class Instruction
     attr_reader :name
 
