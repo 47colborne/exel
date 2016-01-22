@@ -1,6 +1,7 @@
 # EXEL
 [![Gem Version](https://badge.fury.io/rb/exel.svg)](https://badge.fury.io/rb/exel)
 [![Code Climate](https://codeclimate.com/github/47colborne/exel/badges/gpa.svg)](https://codeclimate.com/github/47colborne/exel)
+[![Test Coverage](https://codeclimate.com/github/47colborne/exel/badges/coverage.svg)](https://codeclimate.com/github/47colborne/exel/coverage)
 [![Build Status](https://snap-ci.com/47colborne/exel/branch/master/build_image)](https://snap-ci.com/47colborne/exel/branch/master)
 [![Documentation](http://img.shields.io/badge/docs-rdoc.info-blue.svg)](http://www.rubydoc.info/github/47colborne/exel/master)
 
