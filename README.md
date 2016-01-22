@@ -2,6 +2,7 @@
 [![Gem Version](https://badge.fury.io/rb/exel.svg)](https://badge.fury.io/rb/exel)
 [![Code Climate](https://codeclimate.com/github/47colborne/exel/badges/gpa.svg)](https://codeclimate.com/github/47colborne/exel)
 [![Build Status](https://snap-ci.com/47colborne/exel/branch/master/build_image)](https://snap-ci.com/47colborne/exel/branch/master)
+[![Documentation](http://img.shields.io/badge/docs-rdoc.info-blue.svg)](http://www.rubydoc.info/github/47colborne/exel/master)
 
 EXEL is the Elastic eXEcution Language, a simple Ruby DSL for creating processing jobs that can be run on a single machine, or scaled up to run on dozens of machines with no changes to the job itself. To run a job on more than one machine, simply install EXEL async and remote provider gems to integrate with your preferred platforms. The currently implemented providers so far are:
 
