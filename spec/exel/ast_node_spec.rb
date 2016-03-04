@@ -14,7 +14,7 @@ module EXEL
           node = TestNode.new(instruction)
           allow(node).to receive(:run).and_raise(EXEL::Error::JobTermination, 'Error')
           expect(EXEL.logger).to receive(:error).with('JobTerminationError: Error')
-          expect { node.start(context) }.to_not raise_error
+          expect { node.start(context) }.not_to raise_error
         end
       end
     end

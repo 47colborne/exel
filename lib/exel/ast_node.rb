@@ -13,7 +13,7 @@ module EXEL
     end
 
     def run(_context)
-      fail "#{self.class} does not implement #process"
+      raise "#{self.class} does not implement #process"
     end
 
     def add_child(node)

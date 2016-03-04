@@ -15,7 +15,7 @@ module EXEL
 
         dup = context.deep_dup
         expect(context).to eq(dup)
-        expect(context).to_not be_equal(dup)
+        expect(context).not_to be_equal(dup)
 
         dup[:a][:nested] << 1
         expect(context[:a][:nested]).to be_empty
@@ -129,7 +129,7 @@ module EXEL
         context[:key] = 'value'
         context[:key2] = 'value2'
         context.delete(:key)
-        expect(context.table.keys).to_not include(:key)
+        expect(context.table.keys).not_to include(:key)
         expect(context.table.keys).to include(:key2)
       end
     end
@@ -152,13 +152,13 @@ module EXEL
     end
 
     describe '#==' do
-      it { is_expected.to_not eq(nil) }
+      it { is_expected.not_to eq(nil) }
 
       it { is_expected.to eq(context) }
 
-      it { is_expected.to_not eq(42) }
+      it { is_expected.not_to eq(42) }
 
-      it { is_expected.to_not eq(Context.new(other_key: 'value')) }
+      it { is_expected.not_to eq(Context.new(other_key: 'value')) }
 
       it { is_expected.to eq(context.dup) }
     end

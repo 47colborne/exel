@@ -2,7 +2,7 @@ Person = Struct.new(:name, :email)
 
 class EmailService
   def send_to(email)
-    fail 'Invalid email' unless email =~ /\w+@\w+/
+    raise 'Invalid email' unless email =~ /\w+@\w+/
   end
 end
 

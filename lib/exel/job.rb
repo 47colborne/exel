@@ -7,7 +7,7 @@ module EXEL
       # @param job_name [Symbol] A symbol to set as the name of this job. Used to run it later.
       # @param block A block of code that calls the EXEL DSL methods
       def define(job_name, &block)
-        fail "Job #{job_name.inspect} is already defined" unless registry[job_name].nil?
+        raise "Job #{job_name.inspect} is already defined" unless registry[job_name].nil?
         registry[job_name] = block
       end
 
@@ -25,7 +25,7 @@ module EXEL
       # @raise If no job has been registered with the given name
       def run(dsl_code_or_name, context = {})
         context = EXEL::Context.new(context) if context.is_a?(Hash)
-        (ast = parse(dsl_code_or_name)) ? ast.start(context) : fail(%(Job "#{dsl_code_or_name}" not found))
+        (ast = parse(dsl_code_or_name)) ? ast.start(context) : raise(%(Job "#{dsl_code_or_name}" not found))
       end
 
       private

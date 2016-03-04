@@ -14,7 +14,7 @@ module EXEL
       end
 
       it 'should not run it`s children' do
-        expect(child).to_not receive(:run)
+        expect(child).not_to receive(:run)
         node.run(context)
       end
     end

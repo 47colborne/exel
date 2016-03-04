@@ -8,7 +8,7 @@ module EXEL
       end
 
       def download(uri)
-        fail 'URI must begin with "file://"' unless uri.start_with? 'file://'
+        raise 'URI must begin with "file://"' unless uri.start_with? 'file://'
         File.open(uri.split('file://').last)
       end
 
