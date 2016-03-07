@@ -60,19 +60,19 @@ module EXEL
 
       def process(options, &block)
         processor_class = options.delete(:with)
-        add_instruction_node('process', processor_class, block, options)
+        add_instruction_node(processor_class, block, options)
       end
 
       def async(options = {}, &block)
-        add_instruction_node('async', Processors::AsyncProcessor, block, options)
+        add_instruction_node(Processors::AsyncProcessor, block, options)
       end
 
       def split(options = {}, &block)
-        add_instruction_node('split', Processors::SplitProcessor, block, options)
+        add_instruction_node(Processors::SplitProcessor, block, options)
       end
 
       def run(options = {}, &block)
-        add_instruction_node('run', Processors::RunProcessor, block, options)
+        add_instruction_node(Processors::RunProcessor, block, options)
       end
 
       def context
@@ -81,9 +81,9 @@ module EXEL
 
       private
 
-      def add_instruction_node(name, processor, block, args = {})
+      def add_instruction_node(processor, block, args = {})
         sub_tree = block.nil? ? nil : Parser.parse(block)
-        instruction = EXEL::Instruction.new(name, processor, args, sub_tree)
+        instruction = EXEL::Instruction.new(processor, args, sub_tree)
         node = sub_tree.nil? ? InstructionNode.new(instruction) : InstructionNode.new(instruction, [sub_tree])
         @ast.add_child(node)
       end

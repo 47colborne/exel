@@ -1,6 +1,6 @@
 module EXEL
   describe Instruction do
-    subject(:instruction) { EXEL::Instruction.new('ins_name', processor_class, args) }
+    subject(:instruction) { EXEL::Instruction.new(processor_class, args) }
     let(:processor_class) { double(:processor_class, new: processor_instance) }
     let(:processor_instance) { double(:processor_instance, process: nil) }
     let(:args) { {arg1: 'arg_value1', arg2: {}} }
@@ -46,7 +46,7 @@ module EXEL
 
       context 'with a subtree' do
         let(:subtree) { double(:subtree) }
-        subject(:instruction) { EXEL::Instruction.new('ins_name', processor_class, args, subtree) }
+        subject(:instruction) { EXEL::Instruction.new(processor_class, args, subtree) }
 
         it 'should pass the subtree to the processor' do
           expect(processor_instance).to receive(:process).with(subtree)

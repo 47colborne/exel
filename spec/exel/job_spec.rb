@@ -136,7 +136,7 @@ module EXEL
       context 'without a block' do
         it 'creates a process instruction' do
           processor_class = double(:processor_class)
-          expect(Instruction).to receive(:new).with('process', processor_class, {arg1: 'arg1_value'}, nil)
+          expect(Instruction).to receive(:new).with(processor_class, {arg1: 'arg1_value'}, nil)
 
           parser.process with: processor_class, arg1: 'arg1_value'
         end
@@ -144,7 +144,6 @@ module EXEL
         it 'appends an instruction node to the AST with no children' do
           expect(parser.ast).to receive(:add_child) do |node|
             expect(node).to be_a_kind_of(InstructionNode)
-            expect(node.instruction.name).to eq('process')
             expect(node.children).to eq([])
           end
 
@@ -156,7 +155,7 @@ module EXEL
         it 'passes the parsed subtree to the instruction' do
           processor_class = double(:processor_class)
           expect(Job::Parser).to receive(:parse).with(block).and_return(ast)
-          expect(Instruction).to receive(:new).with('process', processor_class, {arg1: 'arg1_value'}, ast)
+          expect(Instruction).to receive(:new).with(processor_class, {arg1: 'arg1_value'}, ast)
 
           parser.process with: processor_class, arg1: 'arg1_value', &block
         end
@@ -164,7 +163,6 @@ module EXEL
         it 'appends an instruction node to the AST with the parsed block as its subtree' do
           expect(parser.ast).to receive(:add_child) do |node|
             expect(node).to be_a_kind_of(InstructionNode)
-            expect(node.instruction.name).to eq('process')
             expect(node.children).to eq([ast])
           end
 
@@ -184,7 +182,7 @@ module EXEL
         end
 
         it "creates a #{data[:method]} instruction" do
-          expect(Instruction).to receive(:new).with(data[:method].to_s, data[:processor], {arg1: 'arg1_value'}, ast)
+          expect(Instruction).to receive(:new).with(data[:processor], {arg1: 'arg1_value'}, ast)
           parser.send(data[:method], arg1: 'arg1_value') {}
         end
 
@@ -198,7 +196,6 @@ module EXEL
         it 'adds parsed subtree and instruction to the AST' do
           expect(parser.ast).to receive(:add_child) do |node|
             expect(node).to be_a_kind_of(InstructionNode)
-            expect(node.instruction.name).to eq(data[:method].to_s)
             expect(node.children).to eq([ast])
           end
 
