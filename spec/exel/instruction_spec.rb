@@ -6,7 +6,7 @@ module EXEL
     let(:args) { {arg1: 'arg_value1', arg2: {}} }
     let(:context) { {context_key: 'context_value'} }
 
-    describe '#run' do
+    describe '#execute' do
       it 'should call process on an instance of the processor class' do
         expect(processor_class).to receive(:new).and_return(processor_instance)
         expect(processor_instance).to receive(:process)

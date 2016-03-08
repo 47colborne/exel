@@ -128,14 +128,12 @@ module EXEL
 
     describe '#process' do
       let(:block) { proc {} }
+      let(:processor_class) { class_double(Class) }
 
-      before do
-        allow(Job::Parser).to receive(:parse).and_return(ast)
-      end
+      before { allow(Job::Parser).to receive(:parse).and_return(ast) }
 
       context 'without a block' do
         it 'creates a process instruction' do
-          processor_class = double(:processor_class)
           expect(Instruction).to receive(:new).with(processor_class, {arg1: 'arg1_value'}, nil)
 
           parser.process with: processor_class, arg1: 'arg1_value'
@@ -147,13 +145,12 @@ module EXEL
             expect(node.children).to eq([])
           end
 
-          parser.process with: double(:processor_class)
+          parser.process with: processor_class
         end
       end
 
       context 'with a block' do
         it 'passes the parsed subtree to the instruction' do
-          processor_class = double(:processor_class)
           expect(Job::Parser).to receive(:parse).with(block).and_return(ast)
           expect(Instruction).to receive(:new).with(processor_class, {arg1: 'arg1_value'}, ast)
 
@@ -166,7 +163,7 @@ module EXEL
             expect(node.children).to eq([ast])
           end
 
-          parser.process with: double(:processor_class), &block
+          parser.process with: processor_class, &block
         end
       end
     end
@@ -207,6 +204,22 @@ module EXEL
     describe '#context' do
       it 'returns a DeferredContextValue' do
         expect(parser.context).to be_a_kind_of(DeferredContextValue)
+      end
+    end
+
+    describe '#listen' do
+      let(:listener_class) { class_double(Class) }
+
+      it 'creates a listen instruction' do
+        expect(ListenInstruction).to receive(:new).with(:event, listener_class)
+        parser.listen for: :event, with: listener_class
+      end
+
+      it 'adds an InstructionNode containing the listen instruction' do
+        parser.listen for: :event, with: listener_class
+        node = parser.ast.children.first
+        expect(node).to be_a_kind_of(InstructionNode)
+        expect(node.instruction).to be_a_kind_of(ListenInstruction)
       end
     end
   end
