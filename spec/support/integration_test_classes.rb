@@ -1,11 +1,5 @@
 Person = Struct.new(:name, :email)
 
-class EmailService
-  def send_to(email)
-    raise 'Invalid email' unless email =~ /\w+@\w+/
-  end
-end
-
 class RecordLoader
   def initialize(context)
     @context = context
@@ -21,6 +15,10 @@ class RecordLoader
 end
 
 class EmailProcessor
+  include EXEL::Events
+
+  attr_reader :context
+
   def initialize(context)
     @context = context
     @people = context[:people]
@@ -28,6 +26,19 @@ class EmailProcessor
   end
 
   def process(_block)
-    @people.each { |person| @email_service.send_to(person.email) }
+    @people.each do |person|
+      @email_service.send_to(person.email)
+      trigger :email_sent, email: person.email
+    end
+  end
+end
+
+class EmailService
+  def send_to(_email)
+  end
+end
+
+class EmailListener
+  def self.email_sent(_context, _data)
   end
 end
