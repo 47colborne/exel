@@ -39,7 +39,7 @@ describe EXEL do
     end
   end
 
-  after :all do
+  after :each do
     EXEL.configure do |config|
       config.remote_provider = nil # reset providers to default
       config.async_provider = nil
