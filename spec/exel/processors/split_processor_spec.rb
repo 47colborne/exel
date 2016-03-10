@@ -15,7 +15,7 @@ module EXEL
       describe '#process' do
         let(:file) { create_file(3) }
 
-        it 'should process file with 3 lines line by line' do
+        it 'processes file with 3 lines line by line' do
           allow(CSV).to receive(:foreach).and_yield('line0').and_yield('line1').and_yield('line2')
 
           3.times do |i|
@@ -28,14 +28,14 @@ module EXEL
           splitter.process(callback)
         end
 
-        it 'should abort parsing the csv file if it is malformed' do
+        it 'aborts parsing the csv file if it is malformed' do
           allow(CSV).to receive(:foreach).and_raise(CSV::MalformedCSVError)
           expect(splitter).to receive(:process_line).with(:eof, callback)
 
           splitter.process(callback)
         end
 
-        it 'should not delete the resource file if :delete_resource is set to false in the context' do
+        it 'does not delete the resource file if :delete_resource is set to false in the context' do
           allow(CSV).to receive(:foreach).and_yield(:eof)
           expect(File).not_to receive(:delete).with(file.path)
 
@@ -50,7 +50,7 @@ module EXEL
           {input: 3, chunks: %W(0\n1\n 2\n)},
           {input: 4, chunks: %W(0\n1\n 2\n3\n)}
         ].each do |data|
-          it "should produce #{data[:chunks].size} chunks with #{data[:input]} input lines" do
+          it "produces #{data[:chunks].size} chunks with #{data[:input]} input lines" do
             context[:chunk_size] = 2
 
             data[:chunks].each do |chunk|
@@ -67,13 +67,13 @@ module EXEL
       end
 
       describe '#generate_chunk' do
-        it 'should create a file with the contents of the given string' do
+        it 'creates a file with the contents of the given string' do
           file = splitter.generate_chunk('abc')
           content = file.read
           expect(content).to eq('abc')
         end
 
-        it 'should create a file with a unique name' do
+        it 'creates a file with a unique name' do
           3.times do |i|
             file = splitter.generate_chunk('content')
             expect(file.path).to include("text_#{i + 1}_")

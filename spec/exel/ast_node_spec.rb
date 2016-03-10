@@ -10,7 +10,7 @@ module EXEL
 
     describe '#start' do
       context 'when an JobTermination error bubbles up' do
-        it 'should ensure the process fails silently' do
+        it 'ensures the process fails silently' do
           node = TestNode.new(instruction)
           allow(node).to receive(:run).and_raise(EXEL::Error::JobTermination, 'Error')
           expect(EXEL.logger).to receive(:error).with('JobTerminationError: Error')
@@ -20,13 +20,13 @@ module EXEL
     end
 
     describe '#run' do
-      it 'should raise an error if not implemented' do
+      it 'raises an error if not implemented' do
         expect { TestNode.new(instruction).run(context) }.to raise_error 'EXEL::TestNode does not implement #process'
       end
     end
 
     describe '#add_child' do
-      it 'should add the given node to its children' do
+      it 'adds the given node to its children' do
         root = ASTNode.new(instruction)
         child_node = ASTNode.new(instruction)
         child_node2 = ASTNode.new(instruction)

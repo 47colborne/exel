@@ -6,7 +6,7 @@ module EXEL
     it { is_expected.to be_an(ASTNode) }
 
     describe '#run' do
-      it 'should run each child node in sequence' do
+      it 'runs each child node in sequence' do
         expect(node.children.first).to receive(:run).with(context).once.ordered
         expect(node.children.last).to receive(:run).with(context).once.ordered
 
