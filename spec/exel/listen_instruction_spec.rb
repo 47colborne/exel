@@ -6,8 +6,8 @@ module EXEL
 
     describe '#execute' do
       it 'registers the event listener' do
+        expect(instruction).to receive(:register_listener).with(context, :event, listener)
         instruction.execute(context)
-        expect(context[:_listeners].fetch(:event)).to contain_exactly(listener)
       end
     end
   end

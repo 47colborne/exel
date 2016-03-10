@@ -1,22 +1,15 @@
 module EXEL
   # Registers an event listener
   class ListenInstruction
+    include EXEL::Events
+
     def initialize(event, listener)
       @event = event
       @listener = listener
     end
 
     def execute(context)
-      listeners = initialize_listeners(context)
-      listeners[@event] << @listener
-    end
-
-    private
-
-    def initialize_listeners(context)
-      context[:_listeners] ||= {}
-      context[:_listeners][@event] ||= []
-      context[:_listeners]
+      register_listener(context, @event, @listener)
     end
   end
 end
