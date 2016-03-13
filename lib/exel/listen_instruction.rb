@@ -1,3 +1,5 @@
+require_relative 'events'
+
 module EXEL
   # Registers an event listener
   class ListenInstruction
