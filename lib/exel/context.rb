@@ -3,13 +3,11 @@ require 'tempfile'
 module EXEL
   # The +Context+ is the shared memory of a running job. It acts as the source of input to processors and the place for
   # them to store their outputs. It can be serialized and deserialized to support remote execution.
-  class Context
-    # Internal hash of keys/values in the context. Use {#[]} and {#[]=} to get and set values instead of this.
-    attr_reader :table
-
+  class Context < Hash
     # Accepts an optional hash of keys and values to initialize the context with.
     def initialize(initial_context = {})
-      @table = initial_context
+      super()
+      merge!(initial_context)
     end
 
     # Returns a deep copy of this context. The copy and the original will have no shared object references.
@@ -37,40 +35,12 @@ module EXEL
       context
     end
 
-    # Returns the value referenced by the given key
+    # Returns the value referenced by the given key. If it is a remote value, it will be converted to a local value and
+    # the local value will be returned.
     def [](key)
-      value = EXEL::Value.localize(@table[key])
+      value = EXEL::Value.localize(super(key))
       value = get_deferred(value)
-      @table[key] = value
-      value
-    end
-
-    # Stores the given key/value pair
-    def []=(key, value)
-      @table[key] = value
-    end
-
-    # Adds the given key/value pairs to the context, overriding any keys that are already present.
-    #
-    # @return [Context]
-    def merge!(hash)
-      @table.merge!(hash)
-      self
-    end
-
-    # Removes the value referenced by +key+ from the context
-    def delete(key)
-      @table.delete(key)
-    end
-
-    # Two Contexts are equal if they contain the same key/value pairs
-    def ==(other)
-      other.is_a?(EXEL::Context) && table == other.table
-    end
-
-    # Returns true if this instance contains all of the given key/value pairs
-    def include?(hash)
-      @table.merge(hash) == @table
+      self[key] = value
     end
 
     private
@@ -83,7 +53,7 @@ module EXEL
     end
 
     def remotized_table
-      @table.each_with_object({}) { |(key, value), acc| acc[key] = EXEL::Value.remotize(value) }
+      each_with_object({}) { |(key, value), acc| acc[key] = EXEL::Value.remotize(value) }
     end
 
     def get_deferred(value)

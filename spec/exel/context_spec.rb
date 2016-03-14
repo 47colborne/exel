@@ -2,10 +2,13 @@ module EXEL
   describe Context do
     subject(:context) { EXEL::Context.new(key1: '1', key2: 2) }
 
+    it { is_expected.to be_a(Hash) }
+
     describe '#initialize' do
       it 'initializes with a hash' do
-        expect(context.table[:key1]).to eq('1')
-        expect(context.table[:key2]).to eq(2)
+        expect(context[:key1]).to eq('1')
+        expect(context[:key2]).to eq(2)
+        expect(context[:key3]).to be_nil
       end
     end
 
@@ -41,9 +44,10 @@ module EXEL
       end
 
       it 'does not mutate the current context' do
-        original_table = context.table.dup
+        allow(Value).to receive(:remotize).and_return('remote_value')
+        original_table = context.dup
         context.serialize
-        expect(context.table).to eq(original_table)
+        expect(context).to eq(original_table)
       end
     end
 
@@ -73,7 +77,8 @@ module EXEL
       it 'stores the localized value' do
         allow(Value).to receive(:localize).with('value').and_return('localized')
         context[:key]
-        expect(context.table[:key]).to eq('localized')
+        allow(Value).to receive(:localize).with('localized').and_return('localized')
+        context[:key]
       end
 
       context 'DeferredContextValue object' do
@@ -113,68 +118,6 @@ module EXEL
             context[:nested] = {hash_key: [1, deferred_context_value]}
             expect(context[:nested]).to eq(hash_key: [1, context[:key]])
           end
-        end
-      end
-    end
-
-    describe '#[]=' do
-      it 'adds the key/value pair to table' do
-        context[:new_key] = 'new_value'
-        expect(context.table[:new_key]).to eq('new_value')
-      end
-    end
-
-    describe '#delete' do
-      it 'deletes the key/value pair from the table' do
-        context[:key] = 'value'
-        context[:key2] = 'value2'
-        context.delete(:key)
-        expect(context.table.keys).not_to include(:key)
-        expect(context.table.keys).to include(:key2)
-      end
-    end
-
-    describe '#merge!' do
-      it 'merges the given keys and values into the context' do
-        context.table[:overwrite] = 'overwrite'
-        context.table[:existing] = 'existing'
-
-        context.merge!(overwrite: 'changed', new: 'new')
-
-        expect(context.table[:overwrite]).to eq('changed')
-        expect(context.table[:existing]).to eq('existing')
-        expect(context.table[:new]).to eq('new')
-      end
-
-      it 'returns itself' do
-        expect(context.merge!(key: 'value')).to eq(context)
-      end
-    end
-
-    describe '#==' do
-      it { is_expected.not_to eq(nil) }
-
-      it { is_expected.to eq(context) }
-
-      it { is_expected.not_to eq(42) }
-
-      it { is_expected.not_to eq(Context.new(other_key: 'value')) }
-
-      it { is_expected.to eq(context.dup) }
-    end
-
-    describe 'include?' do
-      subject(:context) { EXEL::Context.new(key1: 1, key2: 2, key3: 3) }
-
-      context 'context contains all key value pairs' do
-        it 'returns true' do
-          expect(context).to include(key1: 1, key2: 2)
-        end
-      end
-
-      context 'context does not contain all key value pairs' do
-        it 'returns true' do
-          expect(context).not_to include(foo: 'bar', key2: 2)
         end
       end
     end

@@ -24,7 +24,7 @@ module EXEL
       # @param context [Context, Hash] (Optional) The initial {Context} to be passed to the job.
       # @raise If no job has been registered with the given name
       def run(dsl_code_or_name, context = {})
-        context = EXEL::Context.new(context) if context.is_a?(Hash)
+        context = EXEL::Context.new(context) if context.instance_of?(Hash)
         (ast = parse(dsl_code_or_name)) ? ast.start(context) : raise(%(Job "#{dsl_code_or_name}" not found))
       end
 
