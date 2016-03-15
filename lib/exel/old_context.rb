@@ -1,13 +1,15 @@
 require 'tempfile'
 
 module EXEL
-  # The +Context+ is the shared memory of a running job. It acts as the source of input to processors and the place for
-  # them to store their outputs. It can be serialized and deserialized to support remote execution.
-  class Context < Hash
+  # This is here for one version for backwards compatibility with already serialized contexts, which can't
+  # be deserialized with the new +Context+ class
+  class Context
+    # Internal hash of keys/values in the context. Use {#[]} and {#[]=} to get and set values instead of this.
+    attr_reader :table
+
     # Accepts an optional hash of keys and values to initialize the context with.
     def initialize(initial_context = {})
-      super()
-      merge!(initial_context)
+      @table = initial_context
     end
 
     # Returns a deep copy of this context. The copy and the original will have no shared object references.
@@ -28,38 +30,51 @@ module EXEL
     # Given a string representing the URI to a serialized context, downloads and returns the deserialized context
     #
     # @return [Context]
-    # rubocop:disable Metrics/MethodLength
     def self.deserialize(uri)
       file = EXEL::Value.localize(uri)
-
-      begin
-        context = Marshal.load(file.read)
-      rescue
-        # temporarily in place for backwards compatibility
-
-        dir = File.expand_path('..', __FILE__)
-
-        EXEL.send(:remove_const, :Context)
-        load File.join(dir, 'old_context.rb')
-
-        context = Context.deserialize(uri)
-
-        EXEL.send(:remove_const, :Context)
-        load File.join(dir, 'context.rb')
-      ensure
-        file.close
-      end
-
+      context = Marshal.load(file.read)
+      file.close
       context
     end
-    # rubocop:enable Metrics/MethodLength
 
-    # Returns the value referenced by the given key. If it is a remote value, it will be converted to a local value and
-    # the local value will be returned.
+    def foobar
+      puts 'hi'
+    end
+
+    # Returns the value referenced by the given key
     def [](key)
-      value = EXEL::Value.localize(super(key))
+      value = EXEL::Value.localize(@table[key])
       value = get_deferred(value)
-      self[key] = value
+      @table[key] = value
+      value
+    end
+
+    # Stores the given key/value pair
+    def []=(key, value)
+      @table[key] = value
+    end
+
+    # Adds the given key/value pairs to the context, overriding any keys that are already present.
+    #
+    # @return [Context]
+    def merge!(hash)
+      @table.merge!(hash)
+      self
+    end
+
+    # Removes the value referenced by +key+ from the context
+    def delete(key)
+      @table.delete(key)
+    end
+
+    # Two Contexts are equal if they contain the same key/value pairs
+    def ==(other)
+      other.is_a?(EXEL::Context) && table == other.table
+    end
+
+    # Returns true if this instance contains all of the given key/value pairs
+    def include?(hash)
+      @table.merge(hash) == @table
     end
 
     private
@@ -72,7 +87,7 @@ module EXEL
     end
 
     def remotized_table
-      each_with_object({}) { |(key, value), acc| acc[key] = EXEL::Value.remotize(value) }
+      @table.each_with_object({}) { |(key, value), acc| acc[key] = EXEL::Value.remotize(value) }
     end
 
     def get_deferred(value)

@@ -47,5 +47,5 @@ module EXEL
   end
 
   root = File.expand_path('../..', __FILE__)
-  Dir[File.join(root, 'lib/exel/**/*.rb')].each { |file| require file }
+  Dir[File.join(root, 'lib/exel/**/*.rb')].reject { |file| file.include?('old_context') }.each { |file| require file }
 end
