@@ -8,6 +8,31 @@ module EXEL
   class DeferredContextValue
     attr_reader :keys
 
+    class << self
+      # If +value+ is an instance of +DeferredContextValue+, it will be resolved to its actual value in the context. If
+      # it is an +Array+ or +Hash+ all +DeferredContextValue+ instances within it will be resolved. If it is anything
+      # else, it will just be returned.
+      #
+      # @return value, with all +DeferredContextValue+ instances resolved
+      def resolve(value, context)
+        if deferred?(value)
+          value = value.get(context)
+        elsif value.is_a?(Array)
+          value.map! { |v| resolve(v, context) }
+        elsif value.is_a?(Hash)
+          value.each { |k, v| value[k] = resolve(v, context) }
+        end
+
+        value
+      end
+
+      private
+
+      def deferred?(value)
+        value.is_a?(DeferredContextValue)
+      end
+    end
+
     def initialize
       @keys = []
     end

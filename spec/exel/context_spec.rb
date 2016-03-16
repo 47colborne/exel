@@ -81,44 +81,9 @@ module EXEL
         context[:key]
       end
 
-      context 'DeferredContextValue object' do
-        context 'at the top level' do
-          it 'returns the lookup value from the context' do
-            deferred_context_value = DeferredContextValue.new[:key]
-            context[:deferred_value] = deferred_context_value
-            expect(context[:deferred_value]).to eq(context[:key])
-          end
-        end
-
-        context 'in an array' do
-          it 'returns the lookup value from the context' do
-            deferred_context_value = DeferredContextValue.new[:key]
-            context[:array] = [1, 2, deferred_context_value]
-            expect(context[:array]).to eq([1, 2, context[:key]])
-          end
-        end
-
-        context 'in a hash' do
-          it 'returns the lookup value from the context' do
-            deferred_context_value = DeferredContextValue.new[:key]
-            context[:hash] = {hash_key: deferred_context_value}
-            expect(context[:hash]).to eq(hash_key: context[:key])
-          end
-        end
-
-        context 'in nested arrays and hashes' do
-          it 'looks up a deferred context value in a hash nested in an array' do
-            deferred_context_value = DeferredContextValue.new[:key]
-            context[:nested] = [{}, {hash_key: deferred_context_value}]
-            expect(context[:nested]).to eq([{}, {hash_key: context[:key]}])
-          end
-
-          it 'looks up a deferred context value in an array nested in a hash' do
-            deferred_context_value = DeferredContextValue.new[:key]
-            context[:nested] = {hash_key: [1, deferred_context_value]}
-            expect(context[:nested]).to eq(hash_key: [1, context[:key]])
-          end
-        end
+      it 'looks up deferred values' do
+        expect(DeferredContextValue).to receive(:resolve).with('value', context).and_return('resolved')
+        expect(context[:key]).to eq('resolved')
       end
     end
   end

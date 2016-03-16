@@ -58,7 +58,7 @@ module EXEL
     # the local value will be returned.
     def [](key)
       value = EXEL::Value.localize(super(key))
-      value = get_deferred(value)
+      value = DeferredContextValue.resolve(value, self)
       self[key] = value
     end
 
@@ -73,22 +73,6 @@ module EXEL
 
     def remotized_table
       each_with_object({}) { |(key, value), acc| acc[key] = EXEL::Value.remotize(value) }
-    end
-
-    def get_deferred(value)
-      if deferred?(value)
-        value = value.get(self)
-      elsif value.is_a?(Array)
-        value.map! { |v| get_deferred(v) }
-      elsif value.is_a?(Hash)
-        value.each { |k, v| value[k] = get_deferred(v) }
-      end
-
-      value
-    end
-
-    def deferred?(value)
-      value.is_a?(DeferredContextValue)
     end
   end
 end
