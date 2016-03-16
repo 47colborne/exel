@@ -57,9 +57,11 @@ module EXEL
     # Returns the value referenced by the given key. If it is a remote value, it will be converted to a local value and
     # the local value will be returned.
     def [](key)
-      value = EXEL::Value.localize(super(key))
-      value = DeferredContextValue.resolve(value, self)
-      self[key] = value
+      convert_value!(key, super(key))
+    end
+
+    def fetch(key)
+      convert_value!(key, super(key))
     end
 
     private
@@ -73,6 +75,12 @@ module EXEL
 
     def remotized_table
       each_with_object({}) { |(key, value), acc| acc[key] = EXEL::Value.remotize(value) }
+    end
+
+    def convert_value!(key, value)
+      value = EXEL::Value.localize(value)
+      value = DeferredContextValue.resolve(value, self)
+      self[key] = value
     end
   end
 end

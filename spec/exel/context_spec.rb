@@ -62,28 +62,46 @@ module EXEL
       end
     end
 
-    describe '#[]' do
+    shared_examples 'a reader method' do
       subject(:context) { EXEL::Context.new(key: 'value') }
 
       it 'returns the value' do
-        expect(context[:key]).to eq('value')
+        expect(context.send(method, :key)).to eq('value')
       end
 
       it 'localizes the returned value' do
         expect(Value).to receive(:localize).with('value').and_return('localized')
-        expect(context[:key]).to eq('localized')
+        expect(context.send(method, :key)).to eq('localized')
       end
 
       it 'stores the localized value' do
         allow(Value).to receive(:localize).with('value').and_return('localized')
-        context[:key]
+        context.send(method, :key)
         allow(Value).to receive(:localize).with('localized').and_return('localized')
-        context[:key]
+        context.send(method, :key)
       end
 
       it 'looks up deferred values' do
-        expect(DeferredContextValue).to receive(:resolve).with('value', context).and_return('resolved')
-        expect(context[:key]).to eq('resolved')
+        # eq(context) as an argument matcher is necessary to prevent RSpec from calling fetch on the context, leading to
+        # a stack overflow
+        expect(DeferredContextValue).to receive(:resolve).with('value', eq(context)).and_return('resolved')
+        expect(context.send(method, :key)).to eq('resolved')
+      end
+    end
+
+    describe '#[]' do
+      it_behaves_like 'a reader method' do
+        let(:method) { :[] }
+      end
+    end
+
+    describe '#fetch' do
+      it 'raises an exception if the key is not found' do
+        expect { context.fetch(:unknown) }.to raise_error(KeyError)
+      end
+
+      it_behaves_like 'a reader method' do
+        let(:method) { :fetch }
       end
     end
   end
