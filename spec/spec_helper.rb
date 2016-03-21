@@ -3,7 +3,7 @@ CodeClimate::TestReporter.start
 
 require 'pry'
 
-Dir[File.expand_path('../../lib/**/*.rb', __FILE__)].reject { |f| f.include?('old_context') }.each { |f| require f }
+Dir[File.expand_path('../../lib/**/*.rb', __FILE__)].each { |f| require f }
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.

@@ -28,31 +28,17 @@ module EXEL
     # Given a string representing the URI to a serialized context, downloads and returns the deserialized context
     #
     # @return [Context]
-    # rubocop:disable Metrics/MethodLength
     def self.deserialize(uri)
       file = EXEL::Value.localize(uri)
 
       begin
         context = Marshal.load(file.read)
-      rescue
-        # temporarily in place for backwards compatibility
-
-        dir = File.expand_path('..', __FILE__)
-
-        EXEL.send(:remove_const, :Context)
-        load File.join(dir, 'old_context.rb')
-
-        context = Context.deserialize(uri)
-
-        EXEL.send(:remove_const, :Context)
-        load File.join(dir, 'context.rb')
       ensure
         file.close
       end
 
       context
     end
-    # rubocop:enable Metrics/MethodLength
 
     # Returns the value referenced by the given key. If it is a remote value, it will be converted to a local value and
     # the local value will be returned.
