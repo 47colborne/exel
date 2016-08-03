@@ -25,7 +25,7 @@ module EXEL
     def fail_silently(&_block)
       yield if block_given?
     rescue EXEL::Error::JobTermination => e
-      EXEL.logger.error "JobTerminationError: #{e.message.chomp}"
+      EXEL.logger.send(e.cmd, "JobTerminationError: #{e.message.chomp}")
     end
   end
 end

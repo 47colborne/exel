@@ -10,11 +10,31 @@ module EXEL
 
     describe '#start' do
       context 'when an JobTermination error bubbles up' do
-        it 'ensures the process fails silently' do
-          node = TestNode.new(instruction)
+        let(:node) { TestNode.new(instruction) }
+
+        before do
           allow(node).to receive(:run).and_raise(EXEL::Error::JobTermination, 'Error')
+        end
+
+        it 'ensures the process fails silently' do
           expect(EXEL.logger).to receive(:error).with('JobTerminationError: Error')
           expect { node.start(context) }.not_to raise_error
+        end
+
+        it 'log the error by default' do
+          expect(EXEL.logger).to receive(:error).with('JobTerminationError: Error')
+          node.start(context)
+        end
+
+        context 'given a log instruction' do
+          before do
+            allow(node).to receive(:run).and_raise(EXEL::Error::JobTermination.new('Error', :warn))
+          end
+
+          it 'log the error with the given cmd' do
+            expect(EXEL.logger).to receive(:warn).with('JobTerminationError: Error')
+            node.start(context)
+          end
         end
       end
     end
