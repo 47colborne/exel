@@ -9,7 +9,9 @@ module EXEL
     end
 
     def start(context)
-      fail_silently { run(context) }
+      run(context)
+    rescue EXEL::Error::JobTermination => e
+      EXEL.logger.send(e.cmd, "JobTerminationError: #{e.message.chomp}")
     end
 
     def run(_context)
@@ -18,14 +20,6 @@ module EXEL
 
     def add_child(node)
       @children << node
-    end
-
-    private
-
-    def fail_silently(&_block)
-      yield if block_given?
-    rescue EXEL::Error::JobTermination => e
-      EXEL.logger.send(e.cmd, "JobTerminationError: #{e.message.chomp}")
     end
   end
 end

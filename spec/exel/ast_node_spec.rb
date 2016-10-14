@@ -9,7 +9,7 @@ module EXEL
     TestNode = Class.new(ASTNode)
 
     describe '#start' do
-      context 'when an JobTermination error bubbles up' do
+      context 'when a JobTermination error bubbles up' do
         let(:node) { TestNode.new(instruction) }
 
         before do
@@ -21,7 +21,7 @@ module EXEL
           expect { node.start(context) }.not_to raise_error
         end
 
-        it 'log the error by default' do
+        it 'logs the error by default' do
           expect(EXEL.logger).to receive(:error).with('JobTerminationError: Error')
           node.start(context)
         end
@@ -31,7 +31,7 @@ module EXEL
             allow(node).to receive(:run).and_raise(EXEL::Error::JobTermination.new('Error', :warn))
           end
 
-          it 'log the error with the given cmd' do
+          it 'logs the error with the given cmd' do
             expect(EXEL.logger).to receive(:warn).with('JobTerminationError: Error')
             node.start(context)
           end
