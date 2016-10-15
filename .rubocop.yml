@@ -1,21 +1,21 @@
 require:
-  - rubocop-rspec
   - rubocop/rspec/focused
 
 inherit_from: .rubocop_todo.yml
 
 AllCops:
+  TargetRubyVersion: 2.3
   DisplayCopNames: true
   DisplayStyleGuide: true
 
 Metrics/LineLength:
   Max: 120
 
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
 Style/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
-
-RSpec/DescribedClass:
-  Enabled: false
 
 Metrics/ModuleLength:
   Exclude:
