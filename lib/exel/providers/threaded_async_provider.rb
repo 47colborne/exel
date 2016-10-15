@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module EXEL
   module Providers
     # The default remote provider. Provides async execution by running the given EXEL block in a new Thread

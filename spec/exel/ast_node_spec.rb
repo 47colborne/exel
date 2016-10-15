@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module EXEL
   describe ASTNode do
     let(:context) { instance_double(EXEL::Context) }

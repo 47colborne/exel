@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 group :rspec_rubocop, halt_on_fail: true do
   guard :rspec, cmd: 'bundle exec rspec' do
     require 'guard/rspec/dsl'

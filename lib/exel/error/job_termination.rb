@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module EXEL
   module Error
     # If a processor raises a JobTermination exception, the job will immediately stop running without raising anything.

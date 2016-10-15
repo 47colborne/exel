@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Person = Struct.new(:name, :email)
 
 class RecordLoader

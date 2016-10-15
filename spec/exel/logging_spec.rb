@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module EXEL
   describe Logging do
     before { @restore_logger = Logging.logger }

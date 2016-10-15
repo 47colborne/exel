@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module EXEL
   module Providers
     # The default remote provider. Doesn't actually upload and download files to and from remote storage, but rather

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module EXEL
   # Helper methods useful to processors
   module ProcessorHelper

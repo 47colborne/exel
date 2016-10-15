@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module EXEL
   describe Events do
     class EventTest

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module EXEL
   describe Value do
     let(:uri) { 's3://test_file.csv' }

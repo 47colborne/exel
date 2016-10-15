@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module EXEL
   describe Instruction do
     subject(:instruction) { EXEL::Instruction.new(processor_class, args) }

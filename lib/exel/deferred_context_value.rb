@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module EXEL
   # When +context+ is referenced in a job definition, an instance of +DeferredContextValue+ will be put in its place.
   # At runtime, the first time a +DeferredContextValue+ is read via {EXEL::Context#[]}, it will be replaced by the value

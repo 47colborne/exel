@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module EXEL
   describe ListenInstruction do
     subject(:instruction) { EXEL::ListenInstruction.new(:event, listener) }

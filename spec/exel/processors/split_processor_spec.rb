@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module EXEL
   module Processors
     describe SplitProcessor do
@@ -82,13 +83,7 @@ module EXEL
       end
 
       def create_file(lines)
-        content = ''
-
-        lines.times do |i|
-          line = CSV.generate_line(["line#{i}"])
-          content << line
-        end
-
+        content = Array.new(lines) { |i| CSV.generate_line(["line#{i}"]) }.join
         StringIO.new(content)
       end
     end

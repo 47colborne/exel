@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module EXEL
   describe Context do
     subject(:context) { EXEL::Context.new(key1: '1', key2: 2) }

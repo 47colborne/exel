@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module EXEL
   describe SequenceNode do
     subject(:node) { described_class.new(instance_double(ASTNode), instance_double(ASTNode)) }

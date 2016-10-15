@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 describe EXEL do
   let(:context) { EXEL::Context.new(resource: csv_file, email_service: email_service, delete_resource: false) }
   let(:csv_file) { File.open(File.expand_path('../../fixtures/sample.csv', __FILE__)) }

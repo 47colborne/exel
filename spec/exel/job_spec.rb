@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module EXEL
   describe Job do
     describe '.define' do

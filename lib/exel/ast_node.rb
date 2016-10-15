@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module EXEL
   # An abstract class that serves as the parent class of nodes in the AST
   class ASTNode

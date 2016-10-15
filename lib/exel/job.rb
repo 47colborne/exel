@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module EXEL
   # The +Job+ module provides the main interface for defining and running EXEL jobs
   module Job

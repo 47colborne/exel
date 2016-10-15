@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'exel/version'
 require 'exel/logging'
 require 'ostruct'
