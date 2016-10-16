@@ -15,6 +15,11 @@ module EXEL
         instruction.execute(context)
       end
 
+      it 'invokes the middleware chain' do
+        expect(EXEL.middleware).to receive(:invoke).with(processor_class, context, args)
+        instruction.execute(context)
+      end
+
       it 'does not pass a copy of the context' do
         allow(processor_class).to receive(:new) do |context_arg|
           expect(context_arg).to be(context)

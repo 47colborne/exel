@@ -19,7 +19,7 @@ module EXEL
 
   # @return The current configuration
   def self.configuration
-    @config ||= OpenStruct.new
+    @config ||= OpenStruct.new(middleware: Middleware::Chain.new)
   end
 
   # Yields the configuration object to the given block. Configuration can include:
@@ -45,6 +45,10 @@ module EXEL
   # @return The currently configured remote provider. Defaults to EXEL::Providers::LocalFileProvider
   def self.remote_provider
     configuration.remote_provider || Providers::LocalFileProvider
+  end
+
+  def self.middleware
+    configuration.middleware
   end
 
   root = File.expand_path('../..', __FILE__)

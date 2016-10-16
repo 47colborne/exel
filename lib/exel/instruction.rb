@@ -10,7 +10,8 @@ module EXEL
 
     def execute(context)
       context.merge!(@args)
-      @processor_class.new(context).process(@subtree)
+      processor = @processor_class.new(context)
+      EXEL.middleware.invoke(@processor_class, context, @args) { processor.process(@subtree) }
     end
   end
 end
