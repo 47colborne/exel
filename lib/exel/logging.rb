@@ -5,6 +5,13 @@ module EXEL
   module Logging
     DEFAULT_LEVEL = :info
 
+    # Formats log messages with timestamp, severity and Logging prefix (if set via {Logging.with_prefix})
+    class PrefixFormatter < Logger::Formatter
+      def call(severity, time, _program_name, message)
+        "#{time.utc} severity=#{severity}, #{Logging.prefix}#{message}\n"
+      end
+    end
+
     def self.logger
       @logger || initialize_logger
     end
@@ -12,6 +19,7 @@ module EXEL
     def self.initialize_logger
       @logger = Logger.new(log_filename)
       @logger.level = log_level
+      @logger.formatter = PrefixFormatter.new
       @logger
     end
 
@@ -25,7 +33,19 @@ module EXEL
     end
 
     def self.logger=(logger)
-      @logger = logger || Logger.new('/dev/null')
+      @logger = logger ? LoggerWrapper.new(logger) : Logger.new('/dev/null')
+    end
+
+    # Sets a prefix to be added to any messages sent to the EXEL logger in the given block.
+    def self.with_prefix(prefix)
+      @prefix = prefix
+      yield
+    ensure
+      @prefix = nil
+    end
+
+    def self.prefix
+      @prefix
     end
   end
 end

@@ -11,6 +11,10 @@ AllCops:
 Metrics/LineLength:
   Max: 120
 
+Style/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+  IndentationWidth: 4
+
 Style/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
