@@ -1,7 +1,13 @@
 # frozen_string_literal: true
 module EXEL
   # Helper methods useful to processors
+  # @deprecated Most functionality replaced by {EXEL::Middleware::Logging} middleware.
   module ProcessorHelper
+    def self.included(other)
+      warn "DEPRECATION WARNING: [#{other}] EXEL::ProcessorHelper will be removed. For process logging, please use "\
+           'EXEL::Middleware::Logging instead'
+    end
+
     def tag(*tags)
       tags.map { |t| "[#{t}]" }.join('')
     end

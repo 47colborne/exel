@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'csv'
 require 'tempfile'
-require_relative '../processor_helper'
+require_relative '../logging_helper'
 
 module EXEL
   module Processors
@@ -13,7 +13,7 @@ module EXEL
     #   be deleted when splitting is complete
     # * +:chunk_size+ Set to specify the number of lines that each chunk should contain
     class SplitProcessor
-      include EXEL::ProcessorHelper
+      include EXEL::LoggingHelper
 
       attr_accessor :file_name, :block
 
@@ -27,15 +27,11 @@ module EXEL
         @context = context
         @file = context[:resource]
         @context[:delete_resource] = true if @context[:delete_resource].nil?
-
-        log_prefix_with '[SplitProcessor]'
       end
 
       def process(callback)
-        log_process do
-          process_file(callback)
-          finish(callback)
-        end
+        process_file(callback)
+        finish(callback)
       end
 
       def process_line(line, callback)
