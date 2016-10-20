@@ -38,14 +38,14 @@ module EXEL
 
     # Sets a prefix to be added to any messages sent to the EXEL logger in the given block.
     def self.with_prefix(prefix)
-      @prefix = prefix
+      Thread.current[:exel_log_prefix] = prefix
       yield
     ensure
-      @prefix = nil
+      Thread.current[:exel_log_prefix] = nil
     end
 
     def self.prefix
-      @prefix
+      Thread.current[:exel_log_prefix]
     end
   end
 end
