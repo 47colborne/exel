@@ -8,7 +8,7 @@ module EXEL
 
       CMDS = [:info, :warn, :error].freeze
 
-      def initialize(message, cmd = :error)
+      def initialize(message = nil, cmd = :error)
         super(message)
         @cmd = CMDS.include?(cmd) ? cmd : :error
       end
