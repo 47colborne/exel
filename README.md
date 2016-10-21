@@ -35,15 +35,17 @@ Or install it yourself as:
 
 A processor can be any class that provides the following interface:
 
-    class MyProcessor
-        def initialize(context)
-            # typically context is assigned to @context here
-        end
-        
-        def process(block)
-            # do your work here
-        end
-    end
+```ruby
+class MyProcessor
+  def initialize(context)
+    # typically context is assigned to @context here
+  end
+
+  def process(block)
+    # do your work here
+  end
+end
+```
 
 Processors are initialized immediately before ```#process``` is called, allowing them to set up any state that they need from the context. The ```#process``` method is where your processing logic will be implemented. Processors should be focused on performing one particular aspect of the processing that you want to accomplish, allowing your job to be composed of a sequence of small processing steps. If a block was given in the call to ```process``` in the job DSL, it will be passed as the argument to ```#process``` and can be run with: ```block.run(@context)```
 
@@ -59,35 +61,70 @@ If you use EXEL with an async provider, such as [exel-sidekiq](https://github.co
 
 ### Supported Instructions
 
-* ```process``` Execute the given processor class (specified by the ```:with``` option), given the current context and any additional arguments provided
-* ```split``` Split the input data into 1000 line chunks and run the given block for each chunk. Assumes that the input data is a CSV formatted file referenced by ```context[:resource]```. When each block is run, ```context[:resource]``` will reference to the chunk file.
-* ```async``` Asynchronously run the given block. Uses the configured async provider to execute the block.
+* ```process``` Executes the given processor class (specified by the ```:with``` option), given the current context and any additional arguments provided
+* ```split``` Splits the input data into 1000 line chunks and run the given block for each chunk. Assumes that the input data is a CSV formatted file referenced by ```context[:resource]```. When each block is run, ```context[:resource]``` will reference to the chunk file.
+* ```async``` Asynchronously runs the given block. Uses the configured async provider to execute the block.
 * ```run``` Runs the job specified by the ```:job``` option. The job will run using the current context.
+* ```listen``` Registers an event listener. See the [Events](#events) section below for more detail.
 
 ### Example job
 
-    EXEL::Job.define :example_job do
-        # Download a large CSV data file
-        process with: FTPDownloader, host: ftp.example.com, path: context[:file_path]
-        
-        # split it into smaller 1000 line files
-        split do
-            # for each file asynchronously run the following sequence of processors
-            async do  
-                process with: RecordLoader # convert each row of data into your domain model
-                process with: SomeProcessor # apply some additional processing to each record
-                process with: RecordSaver # write this batch of records to your database
-                process with: ExternalServiceProcessor # interact with some service, ex: updating a search index
-            end
-        end
+```ruby
+EXEL::Job.define :example_job do
+  # Download a large CSV data file
+  process with: FTPDownloader, host: ftp.example.com, path: context[:file_path]
+
+  # split it into smaller 1000 line files
+  split do
+    # for each file asynchronously run the following sequence of processors
+    async do  
+      process with: RecordLoader # convert each row of data into your domain model
+      process with: SomeProcessor # apply some additional processing to each record
+      process with: RecordSaver # write this batch of records to your database
+      process with: ExternalServiceProcessor # interact with some service, ex: updating a search index
     end
+  end
+end
+```
 
 Elsewhere in your application, you could run this job as follows:
 
-    def run_example_job(file_path)
-        context = EXEL::Context.new(file_path: file_path, user: 'username')
-        EXEL::Job.run(:example_job, context)
-    end
+```ruby
+def run_example_job(file_path)
+  # context can also be passed as a Hash
+  context = EXEL::Context.new(file_path: file_path, user: 'username')
+  EXEL::Job.run(:example_job, context)
+end
+```
+
+### Events
+
+Event listeners can be registered using the ```listen``` instruction:
+
+```ruby
+listen for: :my_event, with: MyEventListener
+```
+
+The event listener must implement a method with the same name as the event which accepts two arguments: the context and any data passed when the event was triggered:
+
+```ruby
+class MyEventListener
+  def self.my_event(context, data)
+    # handle event
+  end
+end
+```
+
+To trigger an event, include the ```EXEL::Events``` module and call #trigger with the event name and data:
+
+```ruby
+include EXEL::Events
+
+def process(_block)
+  # trigger event and optionally pass data to the event listener
+  trigger :my_event, foo: 'bar'
+end
+```
 
 ## Contributing
 
