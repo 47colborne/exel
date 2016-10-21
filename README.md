@@ -126,6 +126,34 @@ def process(_block)
 end
 ```
 
+### Middleware
+
+Middleware is code configured to run around each processor execution. It is modelled after [Rack](https://github.com/rack/rack) and [Sidekiq](https://github.com/mperham/sidekiq). Custom middleware can be added as follows:
+
+```ruby
+EXEL.configure do |config|
+  config.middleware.add(MyMiddleware)
+  config.middleware.add(AnotherMiddleware, 'constructor arg')
+end
+```
+  
+Middleware can be any class that implements a ```call``` method that includes a call to ```yield```:
+
+```ruby
+class MyMiddleware
+  def call(processor_class, context, args)
+    puts 'before process'
+    
+    # must yield so other middleware and processor will run
+    yield
+    
+    puts 'after process'
+  end
+end
+```
+  
+The ```call``` method will be passed the class of the processor that will be executed, the current context, and any args that were passed to the processor in the job definition.
+
 ## Contributing
 
 1. Fork it ( https://github.com/[my-github-username]/exel/fork )
