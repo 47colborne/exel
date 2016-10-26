@@ -64,6 +64,18 @@ module EXEL
 
         expect(Logging.prefix).to be_nil
       end
+
+      it 'handles nesting' do
+        Logging.with_prefix('outer') do
+          expect(Logging.prefix).to eq('outer')
+
+          Logging.with_prefix('inner') do
+            expect(Logging.prefix).to eq('inner')
+          end
+
+          expect(Logging.prefix).to eq('outer')
+        end
+      end
     end
   end
 end
