@@ -18,8 +18,6 @@ end
 class EmailProcessor
   include EXEL::Events
 
-  attr_reader :context
-
   def initialize(context)
     @context = context
     @people = context[:people]

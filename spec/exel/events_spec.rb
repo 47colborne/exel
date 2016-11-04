@@ -3,11 +3,19 @@ module EXEL
   describe Events do
     class EventTest
       include Events
+
+      def initialize(context)
+        @context = context
+      end
     end
 
-    subject(:events) { EventTest.new }
+    subject(:events) { EventTest.new(context) }
     let(:event_listener) { double(:event_listener) }
     let(:context) { EXEL::Context.new(Events::LISTENERS_KEY => {event: [event_listener]}) }
+
+    it 'defines an attr_reader for context on the class it is included in' do
+      expect(events.context).to eq(context)
+    end
 
     describe '#register_listener' do
       context 'when no listeners have been defined' do

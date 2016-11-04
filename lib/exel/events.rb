@@ -12,6 +12,10 @@ module EXEL
       listeners_for_event(event, context).each { |listener| listener.send(event, context, data) }
     end
 
+    def self.included(other)
+      other.class_eval { attr_reader :context }
+    end
+
     private
 
     def listeners_for_event(event, context)
