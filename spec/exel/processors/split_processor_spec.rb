@@ -43,6 +43,24 @@ module EXEL
           context[:delete_resource] = false
           splitter.process(callback)
         end
+
+        it 'stops splitting at :max_chunks if it is set in the context' do
+          allow(CSV).to receive(:foreach).and_yield(['line0']).and_yield(['line1']).and_yield(['line2'])
+
+          chunk_file = create_file(0)
+
+          allow(Tempfile).to receive(:new).and_return(chunk_file)
+          expect(callback).to receive(:run).once
+          allow_any_instance_of(StringIO).to receive(:path).and_return('test path')
+
+          expect(File).to receive(:delete).with(file.path)
+
+          context[:chunk_size] = 2
+          context[:max_chunks] = 1
+          splitter.process(callback)
+
+          expect(chunk_file.read).to eq("line0\nline1\n")
+        end
       end
 
       describe '#process_line' do
