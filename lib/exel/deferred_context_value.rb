@@ -48,7 +48,7 @@ module EXEL
 
     # Given a context, returns the value that this instance was acting as a placeholder for.
     def get(context)
-      keys.reduce(context) { |a, e| a[e] }
+      keys.reduce(context) { |acc, elem| acc[elem] }
     end
   end
 end

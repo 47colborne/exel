@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# rubocop:disable Lint/InheritException
 module EXEL
   module Error
     # If a processor raises a JobTermination exception, the job will immediately stop running without raising anything.
@@ -15,3 +16,4 @@ module EXEL
     end
   end
 end
+# rubocop:enable Lint/InheritException

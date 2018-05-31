@@ -63,7 +63,7 @@ module EXEL
     def ensure_transaction_duration(duration, start_time)
       elapsed_time = Time.now.to_f - start_time.to_f
       time_to_sleep = duration.second.to_f - elapsed_time
-      sleep(time_to_sleep) if time_to_sleep > 0
+      sleep(time_to_sleep) if time_to_sleep.positive?
     end
   end
 end
