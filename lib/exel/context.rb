@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require 'tempfile'
+require 'securerandom'
 
 module EXEL
   # The +Context+ is the shared memory of a running job. It acts as the source of input to processors and the place for
