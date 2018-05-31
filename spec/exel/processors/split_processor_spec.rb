@@ -25,6 +25,7 @@ module EXEL
           expect(splitter).to receive(:process_line).with(:eof, callback)
 
           expect(File).to receive(:delete).with(file.path)
+          expect(file).to receive(:close)
 
           splitter.process(callback)
         end
@@ -60,6 +61,19 @@ module EXEL
           splitter.process(callback)
 
           expect(chunk_file.read).to eq("line0\nline1\n")
+        end
+
+        it 'ensures that the source file gets closed and deleted' do
+          allow(CSV).to receive(:foreach).and_raise(Interrupt)
+
+          expect(File).to receive(:delete).with(file.path)
+          expect(file).to receive(:close)
+
+          begin
+            splitter.process(callback)
+          rescue Interrupt
+            nil
+          end
         end
       end
 

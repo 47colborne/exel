@@ -33,6 +33,9 @@ module EXEL
       def process(callback)
         process_file(callback)
         finish(callback)
+      ensure
+        @file.close
+        File.delete(@file.path) if @context[:delete_resource]
       end
 
       def process_line(line, callback)
@@ -97,7 +100,6 @@ module EXEL
 
       def finish(callback)
         process_line(:eof, callback)
-        File.delete(@file.path) if @context[:delete_resource]
       end
     end
   end
