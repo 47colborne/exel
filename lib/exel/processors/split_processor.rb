@@ -26,6 +26,7 @@ module EXEL
         @tempfile_count = 0
         @context = context
         @file = context[:resource]
+        @max_chunks = @context[:max_chunks] || Float::INFINITY
         @context[:delete_resource] = true if @context[:delete_resource].nil?
       end
 
@@ -62,14 +63,10 @@ module EXEL
         CSV.foreach(@file.path, csv_options) do |line|
           process_line(line, callback)
 
-          break if @tempfile_count >= max_chunks
+          break if @tempfile_count == @max_chunks
         end
       rescue CSV::MalformedCSVError => e
         log_error "CSV::MalformedCSVError => #{e.message}"
-      end
-
-      def max_chunks
-        @context[:max_chunks] || Float::INFINITY
       end
 
       def flush_buffer(callback)
