@@ -1,0 +1,11 @@
+language: ruby
+script: bundle exec rspec
+rvm:
+- 2.0
+- 2.5
+notifications:
+  email:
+    recipients:
+      - dev@yroo.com
+    on_success: change
+    on_failure: always
