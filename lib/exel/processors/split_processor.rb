@@ -12,6 +12,8 @@ module EXEL
     # * +:delete_resource+ Defaults to true, can be set to false to preserve the original resource. Otherwise, it will
     #   be deleted when splitting is complete
     # * +:chunk_size+ Set to specify the number of lines that each chunk should contain
+    # * +:max_chunks+ Set to specify the maximum number of chunks that should be processed. The resource will not be
+    #   consumed beyond this limit.
     class SplitProcessor
       include EXEL::LoggingHelper
 
