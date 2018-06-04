@@ -27,6 +27,7 @@ module EXEL
       def run(dsl_code_or_name, context = {})
         context = EXEL::Context.new(context) if context.instance_of?(Hash)
         (ast = parse(dsl_code_or_name)) ? ast.start(context) : raise(%(Job "#{dsl_code_or_name}" not found))
+        context
       end
 
       private

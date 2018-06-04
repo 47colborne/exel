@@ -34,6 +34,12 @@ module EXEL
           expect(ast).to receive(:start).with(context)
           Job.run('code', context)
         end
+
+        it 'returns the context' do
+          allow(Job::Parser).to receive(:parse).and_return(ast)
+          result = Job.run('code', context)
+          expect(result).to be(context)
+        end
       end
 
       context 'with a job name' do
@@ -48,6 +54,11 @@ module EXEL
             expect(Job::Parser).to receive(:parse).with(block).and_return(ast)
             expect(ast).to receive(:start).with(context)
             Job.run(:test_job, context)
+          end
+
+          it 'returns the context' do
+            result = Job.run(:test_job, context)
+            expect(result).to be(context)
           end
         end
 
