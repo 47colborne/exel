@@ -29,5 +29,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'terminal-notifier', '~> 1.6.0'
   spec.add_development_dependency 'terminal-notifier-guard', '~> 1.7.0'
   spec.add_development_dependency 'rubocop-airbnb', '~> 1.0'
+  spec.add_development_dependency 'rubocop-rspec-focused', '~> 1'
   spec.add_development_dependency 'pry-byebug'
 end
