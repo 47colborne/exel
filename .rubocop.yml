@@ -32,7 +32,3 @@ Layout/SpaceInsideHashLiteralBraces:
 
 Metrics/LineLength:
   Max: 120
-
-#Metrics/ModuleLength:
-#  Exclude:
-#    - 'spec/**/*'
