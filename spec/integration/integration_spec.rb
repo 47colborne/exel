@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+
 describe EXEL do
   let(:context) { EXEL::Context.new(resource: csv_file, email_service: email_service, delete_resource: false) }
   let(:csv_file) { File.open(File.expand_path('../../fixtures/sample.csv', __FILE__)) }
   let(:email_service) { EmailService.new }
 
-  before :all do
+  before :all do # rubocop:disable RSpec/BeforeAfterAll
     EXEL::Job.define :processing_steps do
       process with: RecordLoader
       process with: EmailProcessor

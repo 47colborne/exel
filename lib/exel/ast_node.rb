@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+
 module EXEL
   # An abstract class that serves as the parent class of nodes in the AST
   class ASTNode
     attr_reader :instruction, :children
 
-    def initialize(instruction, children = [])
+    def initialize(instruction, children: [])
       @instruction = instruction
       @children = children
     end

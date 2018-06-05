@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 describe EXEL do
   describe '.async_provider' do
     context 'with no async provider set in the configuration' do

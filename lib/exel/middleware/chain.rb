@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module EXEL
   # Middleware is code configured to run around each processor execution. Custom middleware can be added as follows:
   #

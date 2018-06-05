@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'csv'
 require 'tempfile'
 require_relative '../logging_helper'

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'tempfile'
 require 'securerandom'
 
@@ -34,7 +35,7 @@ module EXEL
       file = EXEL::Value.localize(uri)
 
       begin
-        context = Marshal.load(file.read)
+        context = Marshal.load(file.read) # rubocop:disable Airbnb/UnsafeYamlMarshal
       ensure
         file.close
       end

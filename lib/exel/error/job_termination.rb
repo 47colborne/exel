@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # rubocop:disable Lint/InheritException
 module EXEL
   module Error

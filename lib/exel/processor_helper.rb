@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module EXEL
   # Helper methods useful to processors
   # @deprecated Most functionality replaced by {EXEL::Middleware::Logging} middleware.

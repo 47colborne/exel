@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module EXEL
   module Processors
     # Implements the +run+ instruction.

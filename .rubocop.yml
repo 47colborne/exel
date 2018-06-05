@@ -1,23 +1,38 @@
 require:
   - rubocop/rspec/focused
 
-inherit_from: .rubocop_todo.yml
+inherit_from:
+  - .rubocop_airbnb.yml
+  - .rubocop_todo.yml
 
 AllCops:
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.5
   DisplayCopNames: true
   DisplayStyleGuide: true
+
+Airbnb/OptArgParameters:
+  Exclude:
+    - 'lib/exel/processor_helper.rb'
+    - 'lib/exel/logging/logger_wrapper.rb'
+    - 'lib/exel/processors/*.rb'
+    - 'lib/exel/error/job_termination.rb'
+
+Layout/DotPosition:
+  EnforcedStyle: leading
+
+Layout/IndentArray:
+  IndentationWidth: 4
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+  IndentationWidth: 4
+
+Layout/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space
 
 Metrics/LineLength:
   Max: 120
 
-Style/MultilineMethodCallIndentation:
-  EnforcedStyle: indented
-  IndentationWidth: 4
-
-Style/SpaceInsideHashLiteralBraces:
-  EnforcedStyle: no_space
-
-Metrics/ModuleLength:
-  Exclude:
-    - 'spec/**/*'
+#Metrics/ModuleLength:
+#  Exclude:
+#    - 'spec/**/*'

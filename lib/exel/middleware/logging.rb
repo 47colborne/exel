@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module EXEL
   module Middleware
     # Middleware to add a prefix to all messages logged during processor execution. The prefix is specified by the

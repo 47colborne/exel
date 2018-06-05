@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module EXEL
   module Logging
     # Wraps calls to a logger to add {Logging} prefix to log messages
@@ -20,7 +21,9 @@ module EXEL
       end
 
       def add(severity, message = nil, progname = nil)
-        message = yield if message.nil? && block_given?
+        if message.nil? && block_given?
+          message = yield
+        end
         __getobj__.add(severity, "#{Logging.prefix}#{message}", progname)
       end
     end

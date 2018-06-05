@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module EXEL
   # Logging related helper methods for processors
   module LoggingHelper

@@ -1,5 +1,6 @@
 # coding: utf-8
 # frozen_string_literal: true
+
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'exel/version'
@@ -27,7 +28,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'guard-rubocop', '~> 1'
   spec.add_development_dependency 'terminal-notifier', '~> 1.6.0'
   spec.add_development_dependency 'terminal-notifier-guard', '~> 1.7.0'
-  spec.add_development_dependency 'rubocop', '~> 0.45.0'
-  spec.add_development_dependency 'rubocop-rspec-focused', '~> 0'
+  spec.add_development_dependency 'rubocop-airbnb', '~> 1.0'
+  spec.add_development_dependency 'rubocop-rspec-focused', '~> 1'
   spec.add_development_dependency 'pry-byebug'
 end

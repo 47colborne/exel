@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module EXEL
   # Provides methods for registering and triggering event listeners
   module Events

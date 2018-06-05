@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module EXEL
   # The +Job+ module provides the main interface for defining and running EXEL jobs
   module Job
@@ -26,7 +27,8 @@ module EXEL
       # @raise If no job has been registered with the given name
       def run(dsl_code_or_name, context = {})
         context = EXEL::Context.new(context) if context.instance_of?(Hash)
-        (ast = parse(dsl_code_or_name)) ? ast.start(context) : raise(%(Job "#{dsl_code_or_name}" not found))
+        ast = parse(dsl_code_or_name)
+        ast ? ast.start(context) : raise(%(Job "#{dsl_code_or_name}" not found))
         context
       end
 
@@ -92,9 +94,9 @@ module EXEL
         block.nil? ? nil : Parser.parse(block)
       end
 
-      def add_instruction_node(processor, sub_tree, args = {})
-        instruction = EXEL::Instruction.new(processor, args, sub_tree)
-        node = sub_tree.nil? ? InstructionNode.new(instruction) : InstructionNode.new(instruction, [sub_tree])
+      def add_instruction_node(processor, subtree, args = {})
+        instruction = EXEL::Instruction.new(processor, args, subtree: subtree)
+        node = subtree.nil? ? InstructionNode.new(instruction) : InstructionNode.new(instruction, children: [subtree])
         @ast.add_child(node)
       end
     end

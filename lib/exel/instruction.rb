@@ -1,8 +1,9 @@
 # frozen_string_literal: true
+
 module EXEL
   # Represents one step to be executed in the processing of a job
   class Instruction
-    def initialize(processor_class, args, subtree = nil)
+    def initialize(processor_class, args, subtree: nil)
       @processor_class = processor_class
       @args = args || {}
       @subtree = subtree

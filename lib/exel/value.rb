@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module EXEL
   # Contains methods to handle remote and local values. Used for {Context} serialization
   module Value
