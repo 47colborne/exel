@@ -13,7 +13,6 @@ module EXEL
 
       def log_process
         start_time = Time.now
-        EXEL.logger.info 'Starting'
 
         yield
 
