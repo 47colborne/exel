@@ -2,6 +2,7 @@
 
 describe EXEL::Logging do
   before { @restore_logger = EXEL::Logging.logger }
+
   after { EXEL::Logging.logger = @restore_logger }
 
   describe EXEL::Logging::PrefixFormatter do

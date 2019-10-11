@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
 describe EXEL do
+  after :each do
+    EXEL.configure do |config|
+      config.remote_provider = nil # reset providers to default
+      config.async_provider = nil
+    end
+  end
+
   describe '.async_provider' do
     context 'with no async provider set in the configuration' do
       it 'defaults to ThreadedAsyncProvider' do
@@ -38,13 +45,6 @@ describe EXEL do
       it 'returns the configurated remote provider' do
         expect(EXEL.remote_provider).to eq(EXEL::Providers::DummyRemoteProvider)
       end
-    end
-  end
-
-  after :each do
-    EXEL.configure do |config|
-      config.remote_provider = nil # reset providers to default
-      config.async_provider = nil
     end
   end
 end
