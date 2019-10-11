@@ -83,8 +83,6 @@ GEM
       rubocop-rspec (= 1.22.1)
     rubocop-rspec (1.22.1)
       rubocop (>= 0.52.1)
-    rubocop-rspec-focused (1.0.0)
-      rubocop (>= 0.51)
     ruby-progressbar (1.9.0)
     ruby_dep (1.5.0)
     shellany (0.0.1)
@@ -112,9 +110,8 @@ DEPENDENCIES
   rake (~> 10)
   rspec (~> 3)
   rubocop-airbnb (~> 1.0)
-  rubocop-rspec-focused (~> 1)
   terminal-notifier (~> 1.6.0)
   terminal-notifier-guard (~> 1.7.0)
 
 BUNDLED WITH
-   1.16.2
+   1.17.2

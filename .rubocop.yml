@@ -1,6 +1,3 @@
-require:
-  - rubocop/rspec/focused
-
 inherit_from:
   - .rubocop_airbnb.yml
   - .rubocop_todo.yml
@@ -12,10 +9,10 @@ AllCops:
 
 Airbnb/OptArgParameters:
   Exclude:
-    - 'lib/exel/processor_helper.rb'
-    - 'lib/exel/logging/logger_wrapper.rb'
-    - 'lib/exel/processors/*.rb'
-    - 'lib/exel/error/job_termination.rb'
+    - "lib/exel/processor_helper.rb"
+    - "lib/exel/logging/logger_wrapper.rb"
+    - "lib/exel/processors/*.rb"
+    - "lib/exel/error/job_termination.rb"
 
 Layout/DotPosition:
   EnforcedStyle: leading
