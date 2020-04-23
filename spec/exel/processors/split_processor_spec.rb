@@ -31,7 +31,7 @@ describe EXEL::Processors::SplitProcessor do
     end
 
     it 'aborts parsing the csv file if it is malformed' do
-      allow(CSV).to receive(:foreach).and_raise(CSV::MalformedCSVError)
+      allow(CSV).to receive(:foreach).and_raise(CSV::MalformedCSVError.new('message', '1'))
       expect(splitter).to receive(:process_line).with(:eof, callback)
 
       splitter.process(callback)

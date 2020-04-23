@@ -20,7 +20,6 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
-  spec.add_development_dependency 'bundler', '~> 1.17'
   spec.add_development_dependency 'rake', '~> 13'
   spec.add_development_dependency 'rspec', '~> 3'
   spec.add_development_dependency 'simplecov', '~> 0.17'
@@ -29,6 +28,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'guard-rubocop', '~> 1'
   spec.add_development_dependency 'terminal-notifier', '~> 1.6.0'
   spec.add_development_dependency 'terminal-notifier-guard', '~> 1.7.0'
-  spec.add_development_dependency 'rubocop-airbnb', '~> 2.0'
+  spec.add_development_dependency 'rubocop-airbnb', '~> 3.0'
   spec.add_development_dependency 'pry-byebug'
 end

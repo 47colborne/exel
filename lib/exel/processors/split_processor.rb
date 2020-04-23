@@ -66,7 +66,7 @@ module EXEL
       def process_file(callback)
         csv_options = @context[:csv_options] || {col_sep: ','}
 
-        CSV.foreach(@file.path, csv_options) do |line|
+        CSV.foreach(@file.path, **csv_options) do |line|
           process_line(line, callback)
 
           break if @tempfile_count == @max_chunks

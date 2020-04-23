@@ -15,7 +15,7 @@ module EXEL
       end
 
       def self.remote?(uri)
-        uri =~ %r{file://}
+        uri.to_s =~ %r{file://}
       end
     end
   end

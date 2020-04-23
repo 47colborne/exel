@@ -3,7 +3,7 @@ inherit_from:
   - .rubocop_todo.yml
 
 AllCops:
-  TargetRubyVersion: 2.5
+  TargetRubyVersion: 2.7
   DisplayCopNames: true
   DisplayStyleGuide: true
 
@@ -17,7 +17,7 @@ Airbnb/OptArgParameters:
 Layout/DotPosition:
   EnforcedStyle: leading
 
-Layout/IndentArray:
+Layout/IndentFirstArrayElement:
   IndentationWidth: 4
 
 Layout/MultilineMethodCallIndentation:
