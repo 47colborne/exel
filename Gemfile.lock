@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    exel (1.5.1)
+    exel (1.5.2)
 
 GEM
   remote: https://rubygems.org/
