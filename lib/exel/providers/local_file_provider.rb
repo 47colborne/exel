@@ -6,16 +6,17 @@ module EXEL
     # just works with local files.
     class LocalFileProvider
       def upload(file)
-        "file://#{file.path}"
+        RemoteValue.new(URI("file://#{File.absolute_path(file)}"))
       end
 
-      def download(uri)
-        raise 'URI must begin with "file://"' unless uri.start_with? 'file://'
-        File.open(uri.split('file://').last)
+      def download(remote_value)
+        scheme = remote_value.uri.scheme
+        raise "Unsupported URI scheme '#{scheme}'" unless scheme == 'file'
+        File.open(remote_value.uri.path)
       end
 
-      def self.remote?(uri)
-        uri.to_s =~ %r{file://}
+      def self.remote?(value)
+        value.is_a?(RemoteValue)
       end
     end
   end
